@@ -11,6 +11,8 @@ import (
 var Commands = map[string]command.Command{
 	"avatar": {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
 	"ping": {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
+	"snipe": {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
+	"editsnipe": {"Snipe an edited message", "editsnipe [numer]", CategoryFun, []string{}, EditSnipeCommand},
 }
 
 var Handler *SpeedyCmds.PremadeHandler

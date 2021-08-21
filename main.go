@@ -1,14 +1,14 @@
 package main
 
 import (
-	"FBI/Utils"
-	"FBI/commands"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/prim69/fbi-bot/commands"
+	"github.com/prim69/fbi-bot/utils"
 )
 
 func main(){
-	dg, err := discordgo.New("Bot " + Utils.ReadToken())
+	dg, err := discordgo.New("Bot " + utils.ReadToken())
 
 	if err != nil {
 		panic(err)

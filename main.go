@@ -1,13 +1,14 @@
 package main
 
 import (
+	"FBI/Utils"
 	"FBI/commands"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 )
 
 func main(){
-	dg, err := discordgo.New("Bot " + token)
+	dg, err := discordgo.New("Bot " + Utils.ReadToken())
 
 	if err != nil {
 		panic(err)
@@ -15,15 +16,16 @@ func main(){
 
 	dg.AddHandler(onMessageDelete)
 	dg.AddHandler(onMessageUpdate)
-	dg.AddHandler(onMessageCreate)
 
 	commands.RegisterAll(dg)
 
-	dg.Identify.Intents = discordgo.IntentsGuildMessages
+	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds
 
 	if err := dg.Open(); err != nil {
 		panic(err)
 	}
+
+	dg.State.MaxMessageCount = 30000
 
 	_ = dg.UpdateListeningStatus("moans")
 
@@ -32,40 +34,45 @@ func main(){
 	select{}
 }
 
-func onMessageCreate(session *discordgo.Session, msg *discordgo.MessageCreate) {
-	if _, ok := commands.Snipes[msg.ChannelID]; !ok {
-		//commands.Snipes[msg.ChannelID] = make([]*discordgo.Message, 15)
-	}
-
+func onMessageDelete(_ *discordgo.Session, msg *discordgo.MessageDelete) {
+	b := msg.BeforeDelete
 	var attachment *discordgo.MessageAttachment
-	if len(msg.Attachments) > 0 {
-		attachment = msg.Attachments[0]
+	if len(b.Attachments) > 0 {
+		attachment = b.Attachments[0]
 	}
-
-	commands.Messages[msg.ID] = &commands.SnipedMessage{Content: msg.Content, Author: msg.Author, ChannelID: msg.ChannelID, ID: msg.ID, Timestamp: msg.Timestamp, Attachment: attachment}
+	var list []*commands.SnipedMessage
+	list = append(list, &commands.SnipedMessage{
+		Content:    b.Content,
+		Author:     b.Author,
+		ChannelID:  b.ChannelID,
+		ID:         b.ID,
+		Timestamp:  b.Timestamp,
+		Attachment: attachment,
+	})
+	for _, value := range commands.Snipes[b.ChannelID] {
+		list = append(list, value)
+	}
+	commands.Snipes[b.ChannelID] = list
 }
 
-func onMessageDelete(session *discordgo.Session, msg *discordgo.MessageDelete) {
-	if m, ok := commands.Messages[msg.ID]; ok {
-		var list []*commands.SnipedMessage
-		list = append(list, m)
-		for _, value := range commands.Snipes[msg.ChannelID] {
-			list = append(list, value)
-		}
-		commands.Snipes[msg.ChannelID] = list
-		delete(commands.Messages, msg.ID)
+func onMessageUpdate(_ *discordgo.Session, msg *discordgo.MessageUpdate) {
+	b := msg.BeforeUpdate
+	var attachment *discordgo.MessageAttachment
+	if len(b.Attachments) > 0 {
+		attachment = b.Attachments[0]
 	}
-}
-
-func onMessageUpdate(session *discordgo.Session, msg *discordgo.MessageUpdate) {
-	if m, ok := commands.Messages[msg.ID]; ok {
-		m.NewContent = msg.Content
-		var list []*commands.SnipedMessage
-		list = append(list, m)
-		for _, value := range commands.EditSnipes[msg.ChannelID] {
-			list = append(list, value)
-		}
-		commands.EditSnipes[msg.ChannelID] = list
-		delete(commands.Messages, msg.ID)
+	var list []*commands.SnipedMessage
+	list = append(list, &commands.SnipedMessage{
+		Content:    b.Content,
+		NewContent: msg.Content,
+		Author:     b.Author,
+		ChannelID:  b.ChannelID,
+		ID:         b.ID,
+		Timestamp:  b.Timestamp,
+		Attachment: attachment,
+	})
+	for _, value := range commands.EditSnipes[b.ChannelID] {
+		list = append(list, value)
 	}
+	commands.EditSnipes[b.ChannelID] = list
 }

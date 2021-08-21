@@ -16,7 +16,6 @@ type SnipedMessage struct {
 	Attachment *discordgo.MessageAttachment
 }
 
-var Messages = map[string]*SnipedMessage{}
 var Snipes = map[string][]*SnipedMessage{}
 var EditSnipes = map[string][]*SnipedMessage{}
 
@@ -64,7 +63,7 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			Text: strconv.Itoa(num + 1) + "/" + strconv.Itoa(len(Snipes[ctx.GetChannel().ID])) + " | " + time,
 		},
 		Author: &discordgo.MessageEmbedAuthor{
-			Name: msg.Author.Username + "#" + msg.Author.Discriminator,
+			Name: msg.Author.String(),
 			IconURL: msg.Author.AvatarURL(""),
 		},
 		Image: image,
@@ -125,7 +124,7 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			Text: strconv.Itoa(num + 1) + "/" + strconv.Itoa(len(EditSnipes[ctx.GetChannel().ID])) + " | " + time,
 		},
 		Author: &discordgo.MessageEmbedAuthor{
-			Name: msg.Author.Username + "#" + msg.Author.Discriminator,
+			Name: msg.Author.String(),
 			IconURL: msg.Author.AvatarURL(""),
 		},
 		Image: image,

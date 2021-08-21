@@ -6,32 +6,44 @@ import (
 	"github.com/Jviguy/SpeedyCmds/command/commandMap"
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
+	"time"
 )
 
 var Commands = map[string]command.Command{
 	"avatar": {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
 	"ping": {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
 	"snipe": {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
-	"editsnipe": {"Snipe an edited message", "editsnipe [numer]", CategoryFun, []string{}, EditSnipeCommand},
+	"editsnipe": {"Snipe an edited message", "editsnipe [number]", CategoryFun, []string{}, EditSnipeCommand},
+	"nuke": {"Nuke a channel", "nuke", CategoryUtility, []string{}, NukeCommand},
+	"stats": {"View information about the bot", "stats", CategoryBot,[]string{"info"}, StatsCommand},
+	"purge": {"Purge an amount of messages", "purge <amount>", CategoryUtility, []string{"clear"}, PurgeCommand},
+	"play": {"Plays a song", "play <name|link>", CategoryMusic, []string{"p"}, PlayCommand},
+	"backup": {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
+	"load": {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
 }
 
 var Handler *SpeedyCmds.PremadeHandler
 var Fields []*discordgo.MessageEmbedField
 
-var Categories = []string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryMusic}
+var Categories = []string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryModeration, CategoryMusic, CategoryUtility}
 
 var prefix = ""
 
+var UpTime time.Time
+
 const (
-	CategoryGeneral = "General"
-	CategoryFun		= "Fun"
-	CategoryMusic   = "Music"
-	CategoryUser	= "User"
-	CategoryServer	= "Server"
-	CategoryBot		= "Bot"
+	CategoryGeneral    = "General"
+	CategoryFun        = "Fun"
+	CategoryMusic      = "Music"
+	CategoryUser	   = "User"
+	CategoryServer	   = "Server"
+	CategoryBot        = "Bot"
+	CategoryUtility    = "Utility"
+	CategoryModeration = "Moderation"
 )
 
 func RegisterAll(session *discordgo.Session) {
+	UpTime = time.Now()
 	Commands["help"] = command.Command{Description: "Provides a list of commands", Usage: "help <command>", Category: CategoryGeneral, Aliases: []string{}, Execute: HelpCommand}
 	Handler = SpeedyCmds.New(session, commandMap.New(), true, ">")
 	prefix = Handler.Prefix

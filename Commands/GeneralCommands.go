@@ -21,8 +21,12 @@ func HelpCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	}
 
 	if c, ok := Commands[ctx.GetArgs()[0]]; ok {
+		aliases := "None"
+		if len(c.Aliases) > 0 {
+			aliases = strings.Join(c.Aliases, ", ")
+		}
 		_, _ = SendEmbed(ctx, session, discordgo.MessageEmbed{
-			Description: "**Command Name:** " + ctx.GetArgs()[0] + "\n**Aliases:**: " + strings.Join(c.Aliases, ", ") + "\n**Description:** " + c.Description + "\n**Usage:** " + c.Usage,
+			Description: "**Command Name:** " + ctx.GetArgs()[0] + "\n**Aliases:**: " + aliases + "\n**Description:** " + c.Description + "\n**Usage:** " + c.Usage,
 			Color: 0x00B9CF,
 			Footer: &discordgo.MessageEmbedFooter{
 				Text: "Syntax <> = required, [] = optional",

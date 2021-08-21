@@ -1,7 +1,14 @@
 # FBI-Bot
 A multi-purpose, very efficient discord bot written in Go.
 
-# Commands
+# Running the bot
+1. Create a bot account at the [Discord Developer Portal](https://discord.com/developers/applications)
+2. Invite the bot account to a server
+3. Download a release at [releases](https://github.com/Prim69/FBI-Bot/tags)
+4. Run the exe and follow the setup
+5. The setup will ask for your bots token and create a token.tok file, if you ever need to change it simply edit that file or delete it and re-run the setup
+
+# Features
  - General Commands
    - [x] Help
      - Lists all commands

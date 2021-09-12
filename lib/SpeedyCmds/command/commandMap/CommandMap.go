@@ -64,7 +64,7 @@ func (m *Map) Execute(command string,c ctx.Ctx,s *discordgo.Session) error {
 		}
 		em := discordgo.MessageEmbed{}
 		em.Title = "Unknown Command: " + command
-		em.Description = "You might have meant: " + utils.FindClosest(command, utils.GetAllKeysCommands(m.GetAllCommands()))
+		em.Description = "Did you mean: " + utils.FindClosest(command, utils.GetAllKeysCommands(m.GetAllCommands()))
 		_,_ = s.ChannelMessageSendEmbed(c.GetChannel().ID,&em)
 		return nil
 	}

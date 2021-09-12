@@ -2,18 +2,43 @@ package utils
 
 import (
 	"github.com/agnivade/levenshtein"
-	"sort"
+	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
-func FindClosest(search string,array []string) string {
-	var x []int
-	x = make([]int, len(array))
-	for k, val := range array {
-		c := levenshtein.ComputeDistance(search, val)
-		x[k] = c
+func FindClosest(target string, list []string) string {
+	fuz := FindFuzzy(target, list)
+	lev := FindLevenshtein(target, list)
+	if  fuz == nil || *fuz == *lev {
+		return *lev
 	}
-	y := x
-	sort.Ints(y)
-	k := sort.SearchInts(x,y[0])
-	return array[k]
+	return "`" + *lev + "`" + " or `" + *fuz + "`?"
+}
+
+func FindFuzzy(target string, list []string) *string {
+	fuz := fuzzy.Find(target, list)
+	if len(fuz) > 0 {
+		return &fuz[0]
+	}
+	return nil
+}
+
+func FindLevenshtein(target string, list []string) *string {
+	results := []int{}
+	for _, name := range list {
+		results = append(results, levenshtein.ComputeDistance(target, name))
+	}
+	min := results[0]
+	for _, num := range results {
+		if num < min {
+			min = num
+		}
+	}
+	var index int
+	for i, val := range results {
+		if val == min {
+			index = i
+			break
+		}
+	}
+	return &list[index]
 }

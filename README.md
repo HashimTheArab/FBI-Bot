@@ -21,6 +21,15 @@ A multi-purpose, very efficient discord bot written in Go.
    - [x] Editsnipe
      - Shows changes made to the last edited message
      - Supports multiple messages
+ - Web Commands
+   - [ ] Ask
+     - Fetches answer for a question from WolframAlpha
+   - [ ] Urban
+     - Fetches a definition from the Urban Dictionary
+ - Minecraft Commands
+   - [x] Query
+     - Query a minecraft server to receive information
+     - Both long and short (ping) queries
  - Music Commands
    - [ ] Play
       - Plays a song
@@ -28,6 +37,12 @@ A multi-purpose, very efficient discord bot written in Go.
    - [x] Avatar
      - Works with ID and mentions
      - Works with users not in the server (ID)
+   - [ ] Whois
+     - Fetches information about a user
+     - Works with ID, mention, and users not in the server
+ - Server Commands
+   - [ ] Serverinfo
+     - Displays information about the current server
  - Bot Commands
    - [x] Ping
      - Displays both API and regular latency
@@ -44,3 +59,5 @@ A multi-purpose, very efficient discord bot written in Go.
      - Saves a server template
    - [ ] Load
      - Loads a server template
+ - Module System
+   - [ ] Easily enable/disable specific commands/categories

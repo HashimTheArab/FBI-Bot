@@ -9,26 +9,28 @@ import (
 	"time"
 )
 
-var Commands = map[string]command.Command{
-	"avatar": {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
-	"ping": {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
-	"snipe": {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
-	"editsnipe": {"Snipe an edited message", "editsnipe [number]", CategoryFun, []string{}, EditSnipeCommand},
-	"nuke": {"Nuke a channel", "nuke", CategoryUtility, []string{}, NukeCommand},
-	"stats": {"View information about the bot", "stats", CategoryBot,[]string{"info"}, StatsCommand},
-	"purge": {"Purge an amount of messages", "purge <amount>", CategoryUtility, []string{"clear"}, PurgeCommand},
-	"play": {"Plays a song", "play <name|link>", CategoryMusic, []string{"p"}, PlayCommand},
-	"backup": {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
-	"load": {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
+func InitCommands(){
+	commands = map[string]*command.Command{
+		"help": {"Provides a list of commands", "help <command>", CategoryGeneral, []string{}, HelpCommand},
+		"avatar": {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
+		"ping": {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
+		"snipe": {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
+		"editsnipe": {"Snipe an edited message", "editsnipe [number]", CategoryFun, []string{}, EditSnipeCommand},
+		"nuke": {"Nuke a channel", "nuke", CategoryUtility, []string{}, NukeCommand},
+		"stats": {"View information about the bot", "stats", CategoryBot,[]string{"info"}, StatsCommand},
+		"purge": {"Purge an amount of messages", "purge <amount>", CategoryUtility, []string{"clear"}, PurgeCommand},
+		"play": {"Plays a song", "play <name|link>", CategoryMusic, []string{"p"}, PlayCommand},
+		"backup": {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
+		"load": {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
+		"query": {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, []string{}, QueryCommand},
+	}
 }
 
-var Handler *SpeedyCmds.PremadeHandler
-var Fields []*discordgo.MessageEmbedField
+var commands map[string]*command.Command
+var handler *SpeedyCmds.PremadeHandler
+var fields []*discordgo.MessageEmbedField
 
-var Categories = []string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryModeration, CategoryMusic, CategoryUtility}
-
-var prefix = ""
-
+var Categories = []string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryModeration, CategoryMusic, CategoryUtility, CategoryMinecraft}
 var UpTime time.Time
 
 const (
@@ -40,27 +42,28 @@ const (
 	CategoryBot        = "Bot"
 	CategoryUtility    = "Utility"
 	CategoryModeration = "Moderation"
+	CategoryMinecraft  = "Minecraft"
 )
 
 func RegisterAll(session *discordgo.Session) {
 	UpTime = time.Now()
-	Commands["help"] = command.Command{Description: "Provides a list of commands", Usage: "help <command>", Category: CategoryGeneral, Aliases: []string{}, Execute: HelpCommand}
-	Handler = SpeedyCmds.New(session, commandMap.New(), true, ">")
-	prefix = Handler.Prefix
-	for name, Struct := range Commands {
-		Handler.GetCommandMap().RegisterCommand(name, Struct, true)
+	InitCommands()
+	handler = SpeedyCmds.New(session, commandMap.New(), true, ">")
+	for name, c := range commands {
+		c.Usage = handler.Prefix + c.Usage
+		handler.GetCommandMap().RegisterCommand(name, *c, true)
 	}
 
 	for _, name := range Categories {
-		Fields = append(Fields, &discordgo.MessageEmbedField{
+		fields = append(fields, &discordgo.MessageEmbedField{
 			Name:   name,
 			Value:  "None",
 			Inline: false,
 		})
 	}
 
-	for cname, Struct := range Commands {
-		for _, field := range Fields {
+	for cname, Struct := range commands {
+		for _, field := range fields {
 			if field.Name == Struct.Category {
 				if field.Value == "None" {
 					field.Value = "> **" + cname + "** `" + Struct.Description + "`\n"
@@ -73,10 +76,14 @@ func RegisterAll(session *discordgo.Session) {
 
 }
 
+func GetCommand(name string) command.Command {
+	return *commands[name]
+}
+
 func SendInvalidUsage(ctx ctx.Ctx, session *discordgo.Session, usage string) {
 	embed := discordgo.MessageEmbed{
 		Title:       "Invalid Usage!",
-		Description: "Usage: " + prefix + usage,
+		Description: "Usage: " + handler.Prefix + usage,
 		Color:       0x9E1F44,
 	}
 	_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &embed)

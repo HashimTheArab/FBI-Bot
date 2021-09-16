@@ -10,17 +10,17 @@ func HelpCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if len(ctx.GetArgs()) < 1 {
 		_, _ = SendEmbed(ctx, session, discordgo.MessageEmbed{
 			Title: "FBI Bot Commands",
-			Description: Handler.Prefix + "help <command name>",
+			Description: handler.Prefix + "help <command name>",
 			Color: 0x93c993,
 			Footer: &discordgo.MessageEmbedFooter{
 				Text: "Bot made by prim#0419",
 			},
-			Fields: Fields,
+			Fields: fields,
 		})
 		return nil
 	}
 
-	if c, ok := Commands[ctx.GetArgs()[0]]; ok {
+	if c, ok := commands[ctx.GetArgs()[0]]; ok {
 		aliases := "None"
 		if len(c.Aliases) > 0 {
 			aliases = strings.Join(c.Aliases, ", ")

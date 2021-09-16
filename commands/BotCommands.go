@@ -10,6 +10,9 @@ import (
 )
 
 func PingCommand(ctx ctx.Ctx, session *discordgo.Session) error {
+	if len(ctx.GetArgs()) > 0 {
+		return utils.Query(ctx.GetArgs()[0], "19132", ctx, session, utils.ShortQuery)
+	}
 	msg, _ := session.ChannelMessageSend(ctx.GetChannel().ID, "blow me")
 	m1, _ := ctx.GetMessage().Timestamp.Parse()
 	m2, _ := msg.Timestamp.Parse()

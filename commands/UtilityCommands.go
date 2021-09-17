@@ -9,17 +9,14 @@ import (
 func NukeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	p, err := session.State.UserChannelPermissions(ctx.GetAuthor().ID, ctx.GetChannel().ID)
 	if err != nil {
-		SendError(ctx, session, "Failed to retrieve user permissions! Error: " + err.Error())
-		return nil
+		return SendError(ctx, session, "Failed to retrieve user permissions! Error: " + err.Error())
 	}
 	if (p & discordgo.PermissionManageChannels) == 0 {
-		SendError(ctx, session, "In order to use this command, you need the \"Manage Channels\" permission!")
-		return nil
+		return SendError(ctx, session, "In order to use this command, you need the \"Manage Channels\" permission!")
 	}
 	channel := ctx.GetChannel()
 	if _, err := session.ChannelDelete(channel.ID); err != nil {
-		SendError(ctx, session, "Failed to nuke the channel, make sure I have perms!")
-		return nil
+		return SendError(ctx, session, "Failed to nuke the channel, make sure I have perms!")
 	}
 	if channel == nil {
 		return nil
@@ -53,31 +50,21 @@ func NukeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 
 func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if len(ctx.GetArgs()) < 1 {
-		SendInvalidUsage(ctx, session, "purge <amount>")
-		return nil
+		return GetCommand("purge").SendUsage(ctx, session)
 	}
 	num, err := strconv.Atoi(ctx.GetArgs()[0])
 	if err != nil {
-		SendError(ctx, session, "Error: " + err.Error())
-		return nil
+		return SendError(ctx, session, "Error: " + err.Error())
 	}
 	if num < 0 {
-		SendError(ctx, session, "The accepted amount range is 1-100!")
-		return nil
+		return SendError(ctx, session, "The accepted amount range is 1-100!")
 	}
-	p, err := session.State.UserChannelPermissions(ctx.GetAuthor().ID, ctx.GetChannel().ID)
-	if err != nil {
-		SendError(ctx, session, "Failed to retrieve user permissions! Error: " + err.Error())
-		return nil
-	}
-	if (p & discordgo.PermissionManageMessages) == 0 {
-		SendError(ctx, session, "In order to use this command, you need the \"Manage Messages\" permission!")
+	if !hasPermission(ctx, session){
 		return nil
 	}
 	if ctx.GetMessage() != nil {
 		if err := session.ChannelMessageDelete(ctx.GetChannel().ID, ctx.GetMessage().ID); err != nil {
-			SendError(ctx, session, "Failed to purge, error: " + err.Error())
-			return nil
+			return SendError(ctx, session, "Failed to purge, error: " + err.Error())
 		}
 	}
 
@@ -89,13 +76,11 @@ func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 	if err != nil {
-		SendError(ctx, session, "Failed to fetch messages, error: " + err.Error())
-		return nil
+		return SendError(ctx, session, "Failed to fetch messages, error: " + err.Error())
 	}
 
 	if err := session.ChannelMessagesBulkDelete(ctx.GetChannel().ID, messages); err != nil {
-		SendError(ctx, session, "Failed to purge, error: " + err.Error())
-		return nil
+		return SendError(ctx, session, "Failed to purge, error: " + err.Error())
 	}
 	_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
 		Title: "Purge Finished!",

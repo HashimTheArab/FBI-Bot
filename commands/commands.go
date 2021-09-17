@@ -6,6 +6,7 @@ import (
 	"github.com/Jviguy/SpeedyCmds/command/commandMap"
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
+	"github.com/prim69/fbi-bot/utils"
 	"time"
 )
 
@@ -23,6 +24,7 @@ func InitCommands(){
 		"backup": {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
 		"load": {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
 		"query": {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, []string{}, QueryCommand},
+		"module": {"Manage command modules", "module <enable:disable:list>", CategoryModules, []string{"modules", "m"}, ModuleCommand},
 	}
 }
 
@@ -30,7 +32,7 @@ var commands map[string]*command.Command
 var handler *SpeedyCmds.PremadeHandler
 var fields []*discordgo.MessageEmbedField
 
-var Categories = []string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryModeration, CategoryMusic, CategoryUtility, CategoryMinecraft}
+var Categories = [...]string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryModeration, CategoryMusic, CategoryUtility, CategoryModules, CategoryMinecraft}
 var UpTime time.Time
 
 const (
@@ -41,6 +43,7 @@ const (
 	CategoryServer	   = "Server"
 	CategoryBot        = "Bot"
 	CategoryUtility    = "Utility"
+	CategoryModules	   = "Modules"
 	CategoryModeration = "Moderation"
 	CategoryMinecraft  = "Minecraft"
 )
@@ -76,28 +79,40 @@ func RegisterAll(session *discordgo.Session) {
 
 }
 
-func GetCommand(name string) command.Command {
-	return *commands[name]
+func GetCommand(name string) *command.Command {
+	return commands[name]
 }
 
-func SendInvalidUsage(ctx ctx.Ctx, session *discordgo.Session, usage string) {
-	embed := discordgo.MessageEmbed{
-		Title:       "Invalid Usage!",
-		Description: "Usage: " + handler.Prefix + usage,
-		Color:       0x9E1F44,
-	}
-	_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &embed)
-}
-
-func SendError(ctx ctx.Ctx, session *discordgo.Session, err string) {
-	embed := discordgo.MessageEmbed{
+func SendError(ctx ctx.Ctx, session *discordgo.Session, err string) error {
+	_, e := session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
 		Title:       "Error!",
 		Description: err,
-		Color:       0x9E1F44,
-	}
-	_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &embed)
+		Color:       utils.Red,
+	})
+	return e
 }
 
-func SendEmbed(ctx ctx.Ctx, session *discordgo.Session, embed discordgo.MessageEmbed) (*discordgo.Message, error) {
-	return session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &embed)
+func SendEmbed(ctx ctx.Ctx, session *discordgo.Session, embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
+	return session.ChannelMessageSendEmbed(ctx.GetChannel().ID, embed)
+}
+
+func hasPermission(ctx ctx.Ctx, session *discordgo.Session) bool {
+	p, err := session.State.UserChannelPermissions(ctx.GetAuthor().ID, ctx.GetChannel().ID)
+	if err != nil {
+		_ = SendError(ctx, session, "Failed to retrieve user permissions! Error: " + err.Error())
+		return false
+	}
+	if (p & discordgo.PermissionManageMessages) == 0 {
+		_ = SendError(ctx, session, "You do not have permission to use this command.")
+		return false
+	}
+	return true
+}
+
+func isPrim(ctx ctx.Ctx, session *discordgo.Session) bool {
+	if ctx.GetAuthor().ID != "251817735787511809" {
+		_ = SendError(ctx, session, "You do not have permission to use this command.")
+		return false
+	}
+	return true
 }

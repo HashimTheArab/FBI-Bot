@@ -3,6 +3,7 @@ package commands
 import (
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
+	"github.com/prim69/fbi-bot/utils"
 	"strconv"
 )
 
@@ -56,9 +57,9 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		time = "Unavailable"
 	}
 
-	_, _ = SendEmbed(ctx, session, discordgo.MessageEmbed{
+	_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Description: msg.Content,
-		Color: 0xD8CDE9,
+		Color: utils.Pink,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: strconv.Itoa(num + 1) + "/" + strconv.Itoa(len(Snipes[ctx.GetChannel().ID])) + " | " + time,
 		},
@@ -108,7 +109,7 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 
-	_, _ = SendEmbed(ctx, session, discordgo.MessageEmbed{
+	_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Fields: []*discordgo.MessageEmbedField{
 			{
 				Name: "Before",
@@ -119,7 +120,7 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 				Value: msg.NewContent,
 			},
 		},
-		Color: 0xD8CDE9,
+		Color: utils.Pink,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: strconv.Itoa(num + 1) + "/" + strconv.Itoa(len(EditSnipes[ctx.GetChannel().ID])) + " | " + time,
 		},

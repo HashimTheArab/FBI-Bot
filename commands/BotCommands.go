@@ -61,7 +61,7 @@ func StatsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		ts += "and " + seconds + " seconds"
 	}
 
-	_, _ = SendEmbed(ctx, session, discordgo.MessageEmbed{
+	_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Color:       0xF0BBCE,
 		Author:      &discordgo.MessageEmbedAuthor{
 			URL:          utils.DiscordLink,

@@ -60,4 +60,9 @@ A multi-purpose, very efficient discord bot written in Go.
    - [ ] Load
      - Loads a server template
  - Module System
-   - [ ] Easily enable/disable specific commands/categories
+   - [x] Enable
+     - Enable a command/category
+   - [x] Disable
+     - Disable a command/category
+   - [x] List
+     - List all disabled commands/categories

@@ -61,6 +61,7 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 				{Name: "🎉 MOTD", Value: StripColors(a[1])},
 				{Name: "👥 Players", Value: a[4] + "/" + a[5]},
 			},
+			Color: Pink,
 		})
 	} else {
 		r, err := gopherQuery(ip + ":" + port)
@@ -82,6 +83,7 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 				{Name: "🎉 MOTD", Value: r.GetMOTD()},
 				{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: strings.Join(r.GetPlayers(), ", ")},
 			},
+			Color: Pink,
 		})
 	}
 	return nil

@@ -13,7 +13,7 @@ type Command struct {
 	Execute func(ctx ctx.Ctx,session *discordgo.Session) error
 }
 
-func (c Command) SendUsage(ctx ctx.Ctx, session *discordgo.Session) error {
+func (c *Command) SendUsage(ctx ctx.Ctx, session *discordgo.Session) error {
 	_, err := session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
 		Title:       "Invalid Usage!",
 		Description: "Usage: " + c.Usage,

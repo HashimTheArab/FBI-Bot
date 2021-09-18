@@ -7,6 +7,8 @@ import (
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
 	"github.com/prim69/fbi-bot/utils"
+	"github.com/prim69/fbi-bot/utils/settings"
+	"strings"
 	"time"
 )
 
@@ -57,6 +59,12 @@ func RegisterAll(session *discordgo.Session) {
 		handler.GetCommandMap().RegisterCommand(name, *c, true)
 	}
 
+	for _, name := range settings.Data.DisabledCommands {
+		if _, ok := commands[strings.ToLower(name)]; ok {
+			handler.GetCommandMap().Disable(name)
+		}
+	}
+
 	for _, name := range Categories {
 		fields = append(fields, &discordgo.MessageEmbedField{
 			Name:   name,
@@ -81,6 +89,10 @@ func RegisterAll(session *discordgo.Session) {
 
 func GetCommand(name string) *command.Command {
 	return commands[name]
+}
+
+func GetHandler() *SpeedyCmds.PremadeHandler {
+	return handler
 }
 
 func SendError(ctx ctx.Ctx, session *discordgo.Session, err string) error {

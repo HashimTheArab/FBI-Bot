@@ -6,7 +6,7 @@ A multi-purpose, very efficient discord bot written in Go.
 2. Invite the bot account to a server
 3. Download a release at [releases](https://github.com/Prim69/FBI-Bot/tags)
 4. Run the exe and follow the setup
-5. The setup will ask for your bots token and create a token.tok file, if you ever need to change it simply edit that file or delete it and re-run the setup
+5. The setup will ask for your bots token and save it in a file called settings.json, if you ever need to change it simply edit that file
 
 # Features
  - General Commands

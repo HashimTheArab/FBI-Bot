@@ -116,7 +116,7 @@ func (m *Map) Enable(name string){
 	var commands []string
 	for _, v := range m.disabled {
 		if v != name {
-			commands = append(commands, name)
+			commands = append(commands, v)
 		}
 	}
 	m.disabled = commands

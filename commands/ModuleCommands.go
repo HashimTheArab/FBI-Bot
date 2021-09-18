@@ -91,7 +91,9 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			d = "There are currently no commands/categories disabled."
 		}
 		_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
-			Title:       "Disabled Commands/Categories",
+			Author: &discordgo.MessageEmbedAuthor{
+				Name: "Disabled commands/categories",
+			},
 			Description: d,
 			Color:	     utils.Pink,
 		})

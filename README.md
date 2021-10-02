@@ -41,7 +41,7 @@ A multi-purpose, very efficient discord bot written in Go.
      - Fetches information about a user
      - Works with ID, mention, and users not in the server
  - Server Commands
-   - [ ] Serverinfo
+   - [x] Serverinfo
      - Displays information about the current server
  - Bot Commands
    - [x] Ping

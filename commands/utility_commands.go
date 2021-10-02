@@ -9,7 +9,7 @@ import (
 func NukeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	p, err := session.State.UserChannelPermissions(ctx.GetAuthor().ID, ctx.GetChannel().ID)
 	if err != nil {
-		return SendError(ctx, session, "Failed to retrieve user permissions! Error: " + err.Error())
+		return SendError(ctx, session, "Failed to retrieve user permissions! Error: "+err.Error())
 	}
 	if (p & discordgo.PermissionManageChannels) == 0 {
 		return SendError(ctx, session, "In order to use this command, you need the \"Manage Channels\" permission!")
@@ -34,12 +34,12 @@ func NukeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		NSFW:                 channel.NSFW,
 	})
 	_, _ = session.ChannelMessageSendEmbed(ch.ID, &discordgo.MessageEmbed{
-		Title:       "Kaboom! Pussy Nuked!",
-		Color:       0x6b0000,
-		Image:       &discordgo.MessageEmbedImage{
-			URL:      "https://media.discordapp.net/attachments/814542881594671155/858199443056623656/nuke_picture.png",
-			Width:    631,
-			Height:   473,
+		Title: "Kaboom! Pussy Nuked!",
+		Color: 0x6b0000,
+		Image: &discordgo.MessageEmbedImage{
+			URL:    "https://media.discordapp.net/attachments/814542881594671155/858199443056623656/nuke_picture.png",
+			Width:  631,
+			Height: 473,
 		},
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "Ran by: " + ctx.GetAuthor().String(),
@@ -54,17 +54,17 @@ func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	}
 	num, err := strconv.Atoi(ctx.GetArgs()[0])
 	if err != nil {
-		return SendError(ctx, session, "Error: " + err.Error())
+		return SendError(ctx, session, "Error: "+err.Error())
 	}
 	if num < 0 {
 		return SendError(ctx, session, "The accepted amount range is 1-100!")
 	}
-	if !hasPermission(ctx, session){
+	if !hasPermission(ctx, session) {
 		return nil
 	}
 	if ctx.GetMessage() != nil {
 		if err := session.ChannelMessageDelete(ctx.GetChannel().ID, ctx.GetMessage().ID); err != nil {
-			return SendError(ctx, session, "Failed to purge, error: " + err.Error())
+			return SendError(ctx, session, "Failed to purge, error: "+err.Error())
 		}
 	}
 
@@ -76,16 +76,16 @@ func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 	if err != nil {
-		return SendError(ctx, session, "Failed to fetch messages, error: " + err.Error())
+		return SendError(ctx, session, "Failed to fetch messages, error: "+err.Error())
 	}
 
 	if err := session.ChannelMessagesBulkDelete(ctx.GetChannel().ID, messages); err != nil {
-		return SendError(ctx, session, "Failed to purge, error: " + err.Error())
+		return SendError(ctx, session, "Failed to purge, error: "+err.Error())
 	}
 	_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
-		Title: "Purge Finished!",
+		Title:       "Purge Finished!",
 		Description: strconv.Itoa(len(msgs)) + " messages purged!",
-		Color: 0xACF9DC,
+		Color:       0xACF9DC,
 		Footer: &discordgo.MessageEmbedFooter{
 			Text: "Ran by: " + ctx.GetAuthor().String(),
 		},

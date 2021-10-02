@@ -11,10 +11,10 @@ type Ctx interface {
 }
 
 type BaseCtx struct {
-	args []string
-	author *discordgo.User
+	args    []string
+	author  *discordgo.User
 	channel *discordgo.Channel
-	guild *discordgo.Guild
+	guild   *discordgo.Guild
 	message *discordgo.MessageCreate
 }
 
@@ -38,11 +38,11 @@ func (b BaseCtx) GetMessage() *discordgo.MessageCreate {
 	return b.message
 }
 
-func New(args []string,msg *discordgo.MessageCreate,session *discordgo.Session) *BaseCtx {
+func New(args []string, msg *discordgo.MessageCreate, session *discordgo.Session) *BaseCtx {
 	ctx := &BaseCtx{args: args}
 	ctx.author = msg.Author
-	ctx.channel,_ = session.Channel(msg.ChannelID)
-	ctx.guild,_ = session.Guild(msg.GuildID)
+	ctx.channel, _ = session.Channel(msg.ChannelID)
+	ctx.guild, _ = session.Guild(msg.GuildID)
 	ctx.message = msg
 	return ctx
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"regexp"
 	"strings"
-	)
+)
 
 var CommandRegex = regexp.MustCompile(`(?m)("[^"]+"|[^\s"]+)`)
 
@@ -19,17 +19,17 @@ type Handler interface {
 
 //this is the basic premade handler with support for one prefix u can change it up how u want because of the whole interfaces
 type PremadeHandler struct {
-	dg *discordgo.Session
+	dg   *discordgo.Session
 	cmds *commandMap.Map
 	//states wether to use a regex match or a simple split
-	Regex bool
+	Regex  bool
 	Prefix string
 }
 
 //initializes a basic pre made handler for you.
 //noinspection ALL
-func New(dg *discordgo.Session,cmds *commandMap.Map,Regex bool,prefix string) *PremadeHandler {
-	h := &PremadeHandler{dg,cmds,Regex,prefix}
+func New(dg *discordgo.Session, cmds *commandMap.Map, Regex bool, prefix string) *PremadeHandler {
+	h := &PremadeHandler{dg, cmds, Regex, prefix}
 	dg.AddHandler(h.handle)
 	return h
 }
@@ -39,15 +39,15 @@ func (h *PremadeHandler) handle(s *discordgo.Session, msg *discordgo.MessageCrea
 	if msg.Author.Bot {
 		return
 	}
-	if strings.HasPrefix(msg.Content,h.Prefix){
+	if strings.HasPrefix(msg.Content, h.Prefix) {
 		var args []string
-		args = strings.Split(strings.TrimPrefix(msg.Content,h.Prefix)," ")
+		args = strings.Split(strings.TrimPrefix(msg.Content, h.Prefix), " ")
 		if h.Regex {
-			args = CommandRegex.FindAllString(strings.TrimPrefix(msg.Content,h.Prefix),-1)
+			args = CommandRegex.FindAllString(strings.TrimPrefix(msg.Content, h.Prefix), -1)
 		}
-		args , cmd := Shift(args,0)
-		err := h.cmds.Execute(cmd,ctx.New(args,msg,s),s)
-		if err != nil{
+		args, cmd := Shift(args, 0)
+		err := h.cmds.Execute(cmd, ctx.New(args, msg, s), s)
+		if err != nil {
 			em := &discordgo.MessageEmbed{}
 			em.Title = "An Error Occurred while executing that command"
 			em.Description = err.Error()
@@ -61,11 +61,10 @@ func (h *PremadeHandler) GetCommandMap() *commandMap.Map {
 	return h.cmds
 }
 
-func Shift(a []string,i int) ([]string,string) {
+func Shift(a []string, i int) ([]string, string) {
 	b := a[i]
 	copy(a[i:], a[i+1:]) // Shift a[i+1:] left one index.
 	a[len(a)-1] = ""     // Erase last element (write zero value).
 	a = a[:len(a)-1]     // Truncate slice.
-	return a,b
+	return a, b
 }
-

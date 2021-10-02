@@ -7,10 +7,10 @@ import (
 
 type Command struct {
 	Description string
-	Usage string
-	Category string
-	Aliases []string
-	Execute func(ctx ctx.Ctx,session *discordgo.Session) error
+	Usage       string
+	Category    string
+	Aliases     []string
+	Execute     func(ctx ctx.Ctx, session *discordgo.Session) error
 }
 
 func (c *Command) SendUsage(ctx ctx.Ctx, session *discordgo.Session) error {

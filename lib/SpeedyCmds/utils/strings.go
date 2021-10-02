@@ -8,7 +8,7 @@ import (
 func FindClosest(target string, list []string) string {
 	fuz := FindFuzzy(target, list)
 	lev := FindLevenshtein(target, list)
-	if  fuz == nil || *fuz == *lev {
+	if fuz == nil || *fuz == *lev {
 		return *lev
 	}
 	return "`" + *lev + "`" + " or `" + *fuz + "`?"

@@ -27,6 +27,7 @@ func InitCommands(){
 		"load": {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
 		"query": {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, []string{}, QueryCommand},
 		"module": {"Manage command modules", "module <enable:disable:list>", CategoryModules, []string{"modules", "m"}, ModuleCommand},
+		"serverinfo": {"View information on the current server", "serverinfo", CategoryServer, []string{}, ServerCommand},
 	}
 }
 

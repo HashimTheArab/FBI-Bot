@@ -42,8 +42,23 @@ func WhoIsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			}
 		}
 	}
-	_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
-		Title: user.Username + "'s avatar",
+	guild_user, err := session.GuildMember(ctx.GetGuild().ID, user.ID)
+	joined := "Hasn't"
+	if err == nil {
+		t, _ := guild_user.JoinedAt.Parse()
+		joined = t.String()
+	}
+	creation ,_ := discordgo.SnowflakeTimestamp(user.ID)
+	_, err = SendEmbed(ctx, session, &discordgo.MessageEmbed{
+		Title: user.Username,
+		Fields: []*discordgo.MessageEmbedField{
+			{Name: "User Id", Value: user.ID},
+			{Name: "Joined", Value: joined},
+			{Name: "Creation", Value: creation.String()},
+		},
+		Thumbnail: &discordgo.MessageEmbedThumbnail{
+			URL: user.AvatarURL("2048"),
+		},
 		Image: &discordgo.MessageEmbedImage{
 			URL: user.AvatarURL("2048"),
 		},

@@ -37,7 +37,7 @@ A multi-purpose, very efficient discord bot written in Go.
    - [x] Avatar
      - Works with ID and mentions
      - Works with users not in the server (ID)
-   - [ ] Whois
+   - [x] Whois
      - Fetches information about a user
      - Works with ID, mention, and users not in the server
  - Server Commands

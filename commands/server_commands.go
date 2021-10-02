@@ -9,14 +9,11 @@ import (
 
 func ServerCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	server := ctx.GetGuild()
-	fields := make([]*discordgo.MessageEmbedField, 7)
 	owner, err := session.User(server.OwnerID)
 	ownerName := "None"
 	if err == nil {
 		ownerName = owner.Username
 	}
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Owner", Value: ownerName})
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Total Channels", Value: strconv.Itoa(len(server.Channels))})
 	textChannels := 0
 	voiceChannels := 0
 	categories := 0
@@ -30,14 +27,17 @@ func ServerCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			categories++
 		}
 	}
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Total Categories", Value: strconv.Itoa(categories)})
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Text Channels", Value: strconv.Itoa(textChannels)})
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Voice Channels", Value: strconv.Itoa(voiceChannels)})
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Members", Value: strconv.Itoa(server.MemberCount)})
-	fields = append(fields, &discordgo.MessageEmbedField{Name: "Roles", Value: strconv.Itoa(len(server.Roles))})
 	_, err = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Title:  server.Name,
-		Fields: fields,
+		Fields: []*discordgo.MessageEmbedField {
+			{Name: "Owner", Value: ownerName},
+			{Name: "Total Channels", Value: strconv.Itoa(len(server.Channels))},
+			{Name: "Total Categories", Value: strconv.Itoa(categories)},
+			{Name: "Text Channels", Value: strconv.Itoa(textChannels)},
+			{Name: "Voice Channels", Value: strconv.Itoa(voiceChannels)},
+			{Name: "Members", Value: strconv.Itoa(server.MemberCount)},
+			{Name: "Roles", Value: strconv.Itoa(len(server.Roles))},
+		},
 		Image: &discordgo.MessageEmbedImage{
 			URL: server.IconURL(),
 		},

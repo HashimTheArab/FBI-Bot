@@ -8,12 +8,12 @@ import (
 )
 
 type SnipedMessage struct {
-	Content string
+	Content    string
 	NewContent string // only applies to edited messages
-	Author *discordgo.User
-	ChannelID string
-	ID string
-	Timestamp discordgo.Timestamp
+	Author     *discordgo.User
+	ChannelID  string
+	ID         string
+	Timestamp  discordgo.Timestamp
 	Attachment *discordgo.MessageAttachment
 }
 
@@ -33,7 +33,7 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 
-	if num < 0 || (num + 1) > len(Snipes[ctx.GetChannel().ID]) {
+	if num < 0 || (num+1) > len(Snipes[ctx.GetChannel().ID]) {
 		num = 0
 	}
 
@@ -59,12 +59,12 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 
 	_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Description: msg.Content,
-		Color: utils.Pink,
+		Color:       utils.Pink,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: strconv.Itoa(num + 1) + "/" + strconv.Itoa(len(Snipes[ctx.GetChannel().ID])) + " | " + time,
+			Text: strconv.Itoa(num+1) + "/" + strconv.Itoa(len(Snipes[ctx.GetChannel().ID])) + " | " + time,
 		},
 		Author: &discordgo.MessageEmbedAuthor{
-			Name: msg.Author.String(),
+			Name:    msg.Author.String(),
 			IconURL: msg.Author.AvatarURL(""),
 		},
 		Image: image,
@@ -85,7 +85,7 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 
-	if num < 0 || (num + 1) > len(EditSnipes[ctx.GetChannel().ID]) {
+	if num < 0 || (num+1) > len(EditSnipes[ctx.GetChannel().ID]) {
 		num = 0
 	}
 
@@ -112,20 +112,20 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name: "Before",
+				Name:  "Before",
 				Value: msg.Content,
 			},
 			{
-				Name: "After",
+				Name:  "After",
 				Value: msg.NewContent,
 			},
 		},
 		Color: utils.Pink,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: strconv.Itoa(num + 1) + "/" + strconv.Itoa(len(EditSnipes[ctx.GetChannel().ID])) + " | " + time,
+			Text: strconv.Itoa(num+1) + "/" + strconv.Itoa(len(EditSnipes[ctx.GetChannel().ID])) + " | " + time,
 		},
 		Author: &discordgo.MessageEmbedAuthor{
-			Name: msg.Author.String(),
+			Name:    msg.Author.String(),
 			IconURL: msg.Author.AvatarURL(""),
 		},
 		Image: image,

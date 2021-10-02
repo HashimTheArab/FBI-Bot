@@ -8,7 +8,7 @@ import (
 )
 
 type Settings struct {
-	Token string `json:"token"`
+	Token            string   `json:"token"`
 	DisabledCommands []string `json:"disabled_commands"`
 }
 
@@ -35,7 +35,7 @@ func Load() {
 	}
 }
 
-func Save(){
+func Save() {
 	d, err := json.MarshalIndent(Data, "", "    ")
 	if err != nil {
 		fmt.Println("Warning: Error encoding json (settings will not save)\n" + err.Error())

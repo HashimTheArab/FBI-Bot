@@ -12,16 +12,16 @@ import (
 )
 
 type QueryResponse struct {
-	Hostname    string
-	Hostport    string
-	Maxplayers  string
-	Players     []string
-	MOTD        string
-	Version     string
-	Plugins     []string
-	Software    string
-	Whitelist   string
-	Map         string
+	Hostname   string
+	Hostport   string
+	Maxplayers string
+	Players    []string
+	MOTD       string
+	Version    string
+	Plugins    []string
+	Software   string
+	Whitelist  string
+	Map        string
 }
 
 var re = regexp.MustCompile(`(?i)§[0-9A-GK-OR§]`)
@@ -52,7 +52,7 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
 			Title: "Ping Response for " + args[0] + "!",
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
+				Text:    "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{
@@ -71,7 +71,7 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
 			Title: "Query Response for " + ip + ":" + port + "!",
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
+				Text:    "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{
@@ -92,16 +92,16 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 func gopherQuery(address string) (QueryResponse, error) {
 	data, err := query.Do(address)
 	return QueryResponse{
-		Hostname:    data["hostip"],
-		Hostport:    data["hostport"],
-		Maxplayers:  data["maxplayers"],
-		Players:     strings.Split(data["players"], ", "),
-		MOTD:        StripColors(data["hostname"]),
-		Version:     data["version"],
-		Plugins:     strings.Split(data["plugins"], ", "),
-		Software:    data["server_engine"],
-		Whitelist:   data["whitelist"],
-		Map:         data["map"],
+		Hostname:   data["hostip"],
+		Hostport:   data["hostport"],
+		Maxplayers: data["maxplayers"],
+		Players:    strings.Split(data["players"], ", "),
+		MOTD:       StripColors(data["hostname"]),
+		Version:    data["version"],
+		Plugins:    strings.Split(data["plugins"], ", "),
+		Software:   data["server_engine"],
+		Whitelist:  data["whitelist"],
+		Map:        data["map"],
 	}, err
 }
 

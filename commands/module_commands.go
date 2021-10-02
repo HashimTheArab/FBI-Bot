@@ -11,7 +11,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if len(ctx.GetArgs()) < 1 {
 		return GetCommand("module").SendUsage(ctx, session)
 	}
-	if !isPrim(ctx, session){
+	if !isPrim(ctx, session) {
 		return nil
 	}
 	isCategory := func(name string) bool {
@@ -23,7 +23,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		return false
 	}
 	args := ctx.GetArgs()
-	switch args[0]{
+	switch args[0] {
 	case "enable":
 		if len(args) < 2 {
 			_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
@@ -38,15 +38,15 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		if isCategory(name) {
 			t = "category"
 		}
-		if handler.GetCommandMap().Disabled(name){
+		if handler.GetCommandMap().Disabled(name) {
 			handler.GetCommandMap().Enable(name)
 			_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
 				Description: "The " + t + " `" + name + "` has been enabled!",
-				Color: utils.Green,
+				Color:       utils.Green,
 			})
 			return err
 		}
-		return SendError(ctx, session, "There is no disabled command or category with the name `" + name + "`.")
+		return SendError(ctx, session, "There is no disabled command or category with the name `"+name+"`.")
 	case "disable":
 		if len(args) < 2 {
 			_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
@@ -61,7 +61,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		if isCategory(name) {
 			t = "category"
 		}
-		if handler.GetCommandMap().Disabled(name){
+		if handler.GetCommandMap().Disabled(name) {
 			_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
 				Description: "The " + t + " `" + name + "` is already disabled.",
 				Color:       utils.Red,
@@ -72,7 +72,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			handler.GetCommandMap().Disable(name)
 			_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
 				Description: "The command `" + name + "` has been disabled!",
-				Color: utils.Red,
+				Color:       utils.Red,
 			})
 			return err
 		}
@@ -80,11 +80,11 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			handler.GetCommandMap().Disable(name)
 			_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
 				Description: "The category `" + name + "` has been disabled!",
-				Color: utils.Red,
+				Color:       utils.Red,
 			})
 			return err
 		}
-		return SendError(ctx, session, "There is no command or category with the name `" + name + "`.")
+		return SendError(ctx, session, "There is no command or category with the name `"+name+"`.")
 	case "list":
 		d := strings.Join(handler.GetCommandMap().GetDisabled(), ", ")
 		if d == "" {
@@ -95,7 +95,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 				Name: "Disabled commands/categories",
 			},
 			Description: d,
-			Color:	     utils.Pink,
+			Color:       utils.Pink,
 		})
 		return err
 	}

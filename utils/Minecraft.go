@@ -18,7 +18,7 @@ type QueryResponse struct {
 	Players     []string
 	MOTD        string
 	Version     string
-	Plugins     []string
+	Plugins     string
 	Software    string
 	Whitelist   string
 	Map         string
@@ -68,23 +68,35 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 		if err != nil {
 			return err
 		}
-		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
+		var rest string
+		players := strings.Join(r.GetPlayers(), ", ")
+		if len(players) > 800 {
+			rest = players[800:]
+			players = players[:800]
+		}
+		pluginLength, pluginList := r.GetPlugins()
+		embed := &discordgo.MessageEmbed{
 			Title: "Query Response for " + ip + ":" + port + "!",
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
+				Text:    "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{
-				{Name: "🖇 Software", Value: r.GetSoftware()},
-				{Name: "💾 Version", Value: r.GetVersion()},
-				{Name: "🏳 Whitelist", Value: r.GetWhitelist()},
-				{Name: "💻 Plugins (" + strconv.Itoa(r.GetPluginLength()) + ")", Value: strings.Join(r.GetPlugins(), ", ")},
-				{Name: "🗺 Map", Value: r.GetMap()},
-				{Name: "🎉 MOTD", Value: r.GetMOTD()},
-				{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: strings.Join(r.GetPlayers(), ", ")},
+				{Name: "🖇 Software", Value: r.GetStringResposne(r.Software)},
+				{Name: "💾 Version", Value: r.GetStringResposne(r.Version)},
+				{Name: "🏳 Whitelist", Value: r.GetStringResposne(r.Whitelist)},
+				{Name: "💻 Plugins (" + pluginLength + ")", Value: pluginList},
+				{Name: "🗺 Map", Value: r.GetStringResposne(r.Map)},
+				{Name: "🎉 MOTD", Value: r.GetStringResposne(r.MOTD)},
+				{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: players},
 			},
 			Color: Pink,
-		})
+		}
+		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, embed)
+		embed.Fields = []*discordgo.MessageEmbedField{
+			{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: rest},
+		}
+		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, embed)
 	}
 	return nil
 }
@@ -98,59 +110,27 @@ func gopherQuery(address string) (QueryResponse, error) {
 		Players:     strings.Split(data["players"], ", "),
 		MOTD:        StripColors(data["hostname"]),
 		Version:     data["version"],
-		Plugins:     strings.Split(data["plugins"], ", "),
+		Plugins:     data["plugins"],
 		Software:    data["server_engine"],
 		Whitelist:   data["whitelist"],
 		Map:         data["map"],
 	}, err
 }
 
-func (rsp QueryResponse) GetSoftware() string {
-	if sf := rsp.Software; sf != "" {
-		return rsp.Software
+func (rsp *QueryResponse) GetStringResposne(field string) string {
+	if field == "" {
+		return "N/A"
 	}
-	return "Invalid Response"
+	return field
 }
 
-func (rsp QueryResponse) GetVersion() string {
-	if vr := rsp.Version; vr != "" {
-		return rsp.Version
+func (rsp QueryResponse) GetPlugins() (string, string) {
+	if rsp.Plugins != "" {
+		plugins := rsp.Plugins[strings.Index(rsp.Plugins, ":") + 2:]
+		list := strings.Split(plugins, "; ")
+		return strconv.Itoa(len(list)), strings.Join(list, ", ")
 	}
-	return "Invalid Response"
-}
-
-func (rsp QueryResponse) GetPluginLength() int {
-	pl := strings.Split(strings.Join(rsp.Plugins, ""), ";")
-	return len(pl)
-}
-
-func (rsp QueryResponse) GetWhitelist() string {
-	if sf := rsp.Whitelist; sf != "" {
-		return rsp.Whitelist
-	}
-	return "Invalid Response"
-}
-
-func (rsp QueryResponse) GetMap() string {
-	if mp := rsp.Map; mp != "" {
-		return rsp.Map
-	}
-	return "Invalid Response"
-}
-
-func (rsp QueryResponse) GetMOTD() string {
-	if mt := rsp.MOTD; mt != "" {
-		return rsp.MOTD
-	}
-	return "Invalid Response"
-}
-
-func (rsp QueryResponse) GetPlugins() []string {
-	sf := strings.Split(strings.Join(rsp.Plugins[:], ""), ":")
-	if len(sf) > 1 {
-		return sf[1:]
-	}
-	return []string{"This server has plugin query disabled."}
+	return "0", "This server has plugin query disabled."
 }
 
 func (rsp QueryResponse) GetPlayers() []string {

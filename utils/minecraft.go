@@ -52,7 +52,7 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
 			Title: "Ping Response for " + args[0] + "!",
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
+				Text:    "Ran by " + ctx.GetAuthor().String() + " | Time: " + strconv.FormatFloat(time.Now().Sub(start).Seconds(), 'f', 3, 64) + "s",
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{

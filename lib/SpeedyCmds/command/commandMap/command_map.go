@@ -12,15 +12,15 @@ import (
 type Map struct {
 	commands map[string]command.Command
 	disabled []string
-	groups map[string]commandGroup.Group
+	groups   map[string]commandGroup.Group
 }
 
 const (
-	DisabledCommand = "command"
+	DisabledCommand  = "command"
 	DisabledCategory = "category"
 )
 
-func (m *Map) RegisterCommandGroup(name string,group commandGroup.Group) {
+func (m *Map) RegisterCommandGroup(name string, group commandGroup.Group) {
 	if !m.DoesGroupExist(name) && m.CanRegisterGroup(name) {
 		m.groups[name] = group
 	}
@@ -42,24 +42,24 @@ func (m *Map) CanRegisterGroup(name string) bool {
 }
 
 func (m *Map) DoesGroupExist(name string) bool {
-	_,b := m.groups[name]
+	_, b := m.groups[name]
 	return b
 }
 
-func (m *Map) Execute(command string,c ctx.Ctx,s *discordgo.Session) error {
+func (m *Map) Execute(command string, c ctx.Ctx, s *discordgo.Session) error {
 	switch true {
 	case m.CanExecute(command):
-		if m.Disabled(command){
+		if m.Disabled(command) {
 			return sendDisabled(command, DisabledCommand, c, s)
 		}
 		category := m.commands[strings.ToLower(command)].Category
-		if m.Disabled(category){
+		if m.Disabled(category) {
 			return sendDisabled(category, DisabledCategory, c, s)
 		}
-		return m.commands[strings.ToLower(command)].Execute(c,s)
+		return m.commands[strings.ToLower(command)].Execute(c, s)
 	case m.DoesGroupExist(command):
 		if len(c.GetArgs()) > 0 {
-			args,cmd := shift(c.GetArgs(),0)
+			args, cmd := shift(c.GetArgs(), 0)
 			if m.GetGroup(command).CanExecute(cmd) {
 				ct := ctx.New(args, c.GetMessage(), s)
 				//custom ctx for the custom args needed
@@ -70,18 +70,18 @@ func (m *Map) Execute(command string,c ctx.Ctx,s *discordgo.Session) error {
 		for name, cmd := range m.commands {
 			for _, alias := range cmd.Aliases {
 				if alias == strings.ToLower(command) {
-					if m.Disabled(name){
+					if m.Disabled(name) {
 						return sendDisabled(command, DisabledCommand, c, s)
 					}
-					if m.Disabled(cmd.Category){
+					if m.Disabled(cmd.Category) {
 						return sendDisabled(cmd.Category, DisabledCategory, c, s)
 					}
-					return cmd.Execute(c,s)
+					return cmd.Execute(c, s)
 				}
 			}
 		}
 		_, _ = s.ChannelMessageSendEmbed(c.GetChannel().ID, &discordgo.MessageEmbed{
-			Title: "Unknown Command: " + command,
+			Title:       "Unknown Command: " + command,
 			Description: "Did you mean: " + utils.FindClosest(command, utils.GetAllKeysCommands(m.GetAllCommands())),
 		})
 	}
@@ -90,15 +90,15 @@ func (m *Map) Execute(command string,c ctx.Ctx,s *discordgo.Session) error {
 
 func (m *Map) GetAllCommands() map[string]command.Command {
 	cs := m.GetCommands()
-	for k,g := range m.GetGroups(){
-		for name,cmd := range g.GetCommands(){
+	for k, g := range m.GetGroups() {
+		for name, cmd := range g.GetCommands() {
 			cs[k+" "+name] = cmd
 		}
 	}
 	return cs
 }
 
-func (m *Map) RegisterCommand(name string,command command.Command, override bool) {
+func (m *Map) RegisterCommand(name string, command command.Command, override bool) {
 	if m.CanRegisterCommand(name) || override {
 		m.commands[strings.ToLower(name)] = command
 	}
@@ -108,11 +108,11 @@ func (m *Map) CanRegisterCommand(name string) bool {
 	return m.commands[name].Execute == nil && m.GetGroup(name) == nil
 }
 
-func (m *Map) Disable(name string){
+func (m *Map) Disable(name string) {
 	m.disabled = append(m.disabled, name)
 }
 
-func (m *Map) Enable(name string){
+func (m *Map) Enable(name string) {
 	var commands []string
 	for _, v := range m.disabled {
 		if v != name {
@@ -141,7 +141,7 @@ func (m *Map) GetCommands() map[string]command.Command {
 
 //noinspection ALL
 func New() *Map {
-	return &Map{commands: map[string]command.Command{},groups: map[string]commandGroup.Group{}}
+	return &Map{commands: map[string]command.Command{}, groups: map[string]commandGroup.Group{}}
 }
 
 func (m *Map) CanExecute(name string) bool {
@@ -149,12 +149,12 @@ func (m *Map) CanExecute(name string) bool {
 	return ok
 }
 
-func shift(a []string,i int) ([]string,string) {
+func shift(a []string, i int) ([]string, string) {
 	b := a[i]
 	copy(a[i:], a[i+1:]) // Shift a[i+1:] left one index.
 	a[len(a)-1] = ""     // Erase last element (write zero value).
 	a = a[:len(a)-1]     // Truncate slice.
-	return a,b
+	return a, b
 }
 
 func sendDisabled(name string, t string, ctx ctx.Ctx, session *discordgo.Session) error {

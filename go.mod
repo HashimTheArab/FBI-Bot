@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/Jviguy/SpeedyCmds v0.0.9
 	github.com/bwmarrin/discordgo v0.23.2
-	github.com/davecgh/go-spew v1.1.1
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/sandertv/go-raknet v1.10.0
 	github.com/sandertv/gophertunnel v1.14.3
 )

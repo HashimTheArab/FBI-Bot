@@ -10,7 +10,7 @@ import (
 	"syscall"
 )
 
-func main(){
+func main() {
 	settings.Load()
 	dg, err := discordgo.New("Bot " + settings.Data.Token)
 
@@ -23,7 +23,7 @@ func main(){
 
 	commands.RegisterAll(dg)
 
-	dg.Identify.Intents = discordgo.IntentsGuildMessages | discordgo.IntentsGuilds
+	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences
 
 	if err := dg.Open(); err != nil {
 		panic(err)
@@ -44,7 +44,7 @@ func main(){
 		os.Exit(0)
 	}()
 
-	select{}
+	select {}
 }
 
 func onMessageDelete(_ *discordgo.Session, msg *discordgo.MessageDelete) {

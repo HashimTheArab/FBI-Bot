@@ -4,19 +4,23 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/prim69/wolframgo"
 	"os"
 )
 
 type Settings struct {
-	Token            string   `json:"token"`
-	DisabledCommands []string `json:"disabled_commands"`
+	Token            string            `json:"token"`
+	WolframAppID     string            `json:"wolfram_app_id"`
+	DisabledCommands []string          `json:"disabled_commands"`
+	MainXBLToken     string            `json:"main_xbl_token"`
+	XBLTokens        map[string]string `json:"xbl_tokens"`
 }
 
 var Data = Settings{}
 
 func New() string {
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("Welcome to the Bot setup!\nToken: ")
+	fmt.Println("Welcome to the Bot setup!")
 	scanner.Scan()
 	Data.Token = scanner.Text()
 	Save()
@@ -32,6 +36,9 @@ func Load() {
 	}
 	if Data.Token == "" {
 		New()
+	}
+	if Data.WolframAppID != "" {
+		wolframgo.AppID = Data.WolframAppID
 	}
 }
 

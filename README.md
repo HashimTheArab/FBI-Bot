@@ -22,7 +22,7 @@ A multi-purpose, very efficient discord bot written in Go.
      - Shows changes made to the last edited message
      - Supports multiple messages
  - Web Commands
-   - [ ] Ask
+   - [x] Ask
      - Fetches answer for a question from WolframAlpha
    - [ ] Urban
      - Fetches a definition from the Urban Dictionary

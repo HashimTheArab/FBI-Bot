@@ -12,16 +12,16 @@ import (
 )
 
 type QueryResponse struct {
-	Hostname    string
-	Hostport    string
-	Maxplayers  string
-	Players     []string
-	MOTD        string
-	Version     string
-	Plugins     string
-	Software    string
-	Whitelist   string
-	Map         string
+	Hostname   string
+	Hostport   string
+	Maxplayers string
+	Players    []string
+	MOTD       string
+	Version    string
+	Plugins    string
+	Software   string
+	Whitelist  string
+	Map        string
 }
 
 var re = regexp.MustCompile(`(?i)§[0-9A-GK-OR§]`)
@@ -82,12 +82,12 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{
-				{Name: "🖇 Software", Value: r.GetStringResposne(r.Software)},
-				{Name: "💾 Version", Value: r.GetStringResposne(r.Version)},
-				{Name: "🏳 Whitelist", Value: r.GetStringResposne(r.Whitelist)},
+				{Name: "🖇 Software", Value: r.GetStringResponse(r.Software)},
+				{Name: "💾 Version", Value: r.GetStringResponse(r.Version)},
+				{Name: "🏳 Whitelist", Value: r.GetStringResponse(r.Whitelist)},
 				{Name: "💻 Plugins (" + pluginLength + ")", Value: pluginList},
-				{Name: "🗺 Map", Value: r.GetStringResposne(r.Map)},
-				{Name: "🎉 MOTD", Value: r.GetStringResposne(r.MOTD)},
+				{Name: "🗺 Map", Value: r.GetStringResponse(r.Map)},
+				{Name: "🎉 MOTD", Value: r.GetStringResponse(r.MOTD)},
 				{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: players},
 			},
 			Color: Pink,
@@ -104,20 +104,20 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 func gopherQuery(address string) (QueryResponse, error) {
 	data, err := query.Do(address)
 	return QueryResponse{
-		Hostname:    data["hostip"],
-		Hostport:    data["hostport"],
-		Maxplayers:  data["maxplayers"],
-		Players:     strings.Split(data["players"], ", "),
-		MOTD:        StripColors(data["hostname"]),
-		Version:     data["version"],
-		Plugins:     data["plugins"],
-		Software:    data["server_engine"],
-		Whitelist:   data["whitelist"],
-		Map:         data["map"],
+		Hostname:   data["hostip"],
+		Hostport:   data["hostport"],
+		Maxplayers: data["maxplayers"],
+		Players:    strings.Split(data["players"], ", "),
+		MOTD:       StripColors(data["hostname"]),
+		Version:    data["version"],
+		Plugins:    data["plugins"],
+		Software:   data["server_engine"],
+		Whitelist:  data["whitelist"],
+		Map:        data["map"],
 	}, err
 }
 
-func (rsp *QueryResponse) GetStringResposne(field string) string {
+func (rsp *QueryResponse) GetStringResponse(field string) string {
 	if field == "" {
 		return "N/A"
 	}
@@ -126,7 +126,7 @@ func (rsp *QueryResponse) GetStringResposne(field string) string {
 
 func (rsp QueryResponse) GetPlugins() (string, string) {
 	if rsp.Plugins != "" {
-		plugins := rsp.Plugins[strings.Index(rsp.Plugins, ":") + 2:]
+		plugins := rsp.Plugins[strings.Index(rsp.Plugins, ":")+2:]
 		list := strings.Split(plugins, "; ")
 		return strconv.Itoa(len(list)), strings.Join(list, ", ")
 	}

@@ -48,7 +48,7 @@ func WhoIsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		t, _ := guild_user.JoinedAt.Parse()
 		joined = t.String()
 	}
-	creation ,_ := discordgo.SnowflakeTimestamp(user.ID)
+	creation, _ := discordgo.SnowflakeTimestamp(user.ID)
 	_, err = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Title: user.Username,
 		Fields: []*discordgo.MessageEmbedField{

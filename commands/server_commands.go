@@ -28,8 +28,8 @@ func ServerCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 	_, err = SendEmbed(ctx, session, &discordgo.MessageEmbed{
-		Title:  server.Name,
-		Fields: []*discordgo.MessageEmbedField {
+		Title: server.Name,
+		Fields: []*discordgo.MessageEmbedField{
 			{Name: "Owner", Value: ownerName},
 			{Name: "Total Channels", Value: strconv.Itoa(len(server.Channels))},
 			{Name: "Total Categories", Value: strconv.Itoa(categories)},

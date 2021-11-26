@@ -12,22 +12,23 @@ import (
 	"time"
 )
 
-func InitCommands(){
+func InitCommands() {
 	commands = map[string]*command.Command{
-		"help": {"Provides a list of commands", "help <command>", CategoryGeneral, []string{}, HelpCommand},
-		"avatar": {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
-		"ping": {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
-		"snipe": {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
-		"editsnipe": {"Snipe an edited message", "editsnipe [number]", CategoryFun, []string{}, EditSnipeCommand},
-		"nuke": {"Nuke a channel", "nuke", CategoryUtility, []string{}, NukeCommand},
-		"stats": {"View information about the bot", "stats", CategoryBot,[]string{"info"}, StatsCommand},
-		"purge": {"Purge an amount of messages", "purge <amount>", CategoryUtility, []string{"clear"}, PurgeCommand},
-		"play": {"Plays a song", "play <name|link>", CategoryMusic, []string{"p"}, PlayCommand},
-		"backup": {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
-		"load": {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
-		"query": {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, []string{}, QueryCommand},
-		"module": {"Manage command modules", "module <enable:disable:list>", CategoryModules, []string{"modules", "m"}, ModuleCommand},
+		"help":       {"Provides a list of commands", "help <command>", CategoryGeneral, []string{}, HelpCommand},
+		"avatar":     {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
+		"ping":       {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
+		"snipe":      {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
+		"editsnipe":  {"Snipe an edited message", "editsnipe [number]", CategoryFun, []string{}, EditSnipeCommand},
+		"nuke":       {"Nuke a channel", "nuke", CategoryUtility, []string{}, NukeCommand},
+		"about":      {"View information about the bot", "about", CategoryBot, []string{"info"}, StatsCommand},
+		"purge":      {"Purge an amount of messages", "purge <amount>", CategoryUtility, []string{"clear"}, PurgeCommand},
+		"play":       {"Plays a song", "play <name|link>", CategoryMusic, []string{"p"}, PlayCommand},
+		"backup":     {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
+		"load":       {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
+		"query":      {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, []string{}, QueryCommand},
+		"module":     {"Manage command modules", "module <enable:disable:list>", CategoryModules, []string{"modules", "m"}, ModuleCommand},
 		"serverinfo": {"View information on the current server", "serverinfo", CategoryServer, []string{}, ServerCommand},
+		"ask":        {"Answers a question using AI", "ask <question>", CategoryWeb, []string{}, AskCommand},
 	}
 }
 
@@ -42,11 +43,12 @@ const (
 	CategoryGeneral    = "General"
 	CategoryFun        = "Fun"
 	CategoryMusic      = "Music"
-	CategoryUser	   = "User"
-	CategoryServer	   = "Server"
+	CategoryWeb        = "Web"
+	CategoryUser       = "User"
+	CategoryServer     = "Server"
 	CategoryBot        = "Bot"
 	CategoryUtility    = "Utility"
-	CategoryModules	   = "Modules"
+	CategoryModules    = "Modules"
 	CategoryModeration = "Moderation"
 	CategoryMinecraft  = "Minecraft"
 )
@@ -112,7 +114,7 @@ func SendEmbed(ctx ctx.Ctx, session *discordgo.Session, embed *discordgo.Message
 func hasPermission(ctx ctx.Ctx, session *discordgo.Session) bool {
 	p, err := session.State.UserChannelPermissions(ctx.GetAuthor().ID, ctx.GetChannel().ID)
 	if err != nil {
-		_ = SendError(ctx, session, "Failed to retrieve user permissions! Error: " + err.Error())
+		_ = SendError(ctx, session, "Failed to retrieve user permissions! Error: "+err.Error())
 		return false
 	}
 	if (p & discordgo.PermissionManageMessages) == 0 {

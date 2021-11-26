@@ -8,10 +8,10 @@ import (
 
 /**
 Group a command group used for implementing things like !moderation ban @player
- */
+*/
 type Group interface {
 	GetName() string
-	AddCommand(name string,cmd command.Command)
+	AddCommand(name string, cmd command.Command)
 	GetCommand(cmd string) command.Command
 	GetCommands() map[string]command.Command
 	CanExecute(cmd string) bool
@@ -25,7 +25,7 @@ type CmdGroup struct {
 }
 
 func (c *CmdGroup) CanExecute(cmd string) bool {
-	_,ok := c.GetCommands()[cmd]
+	_, ok := c.GetCommands()[cmd]
 	return ok
 }
 
@@ -33,7 +33,7 @@ func (c *CmdGroup) GetName() string {
 	return c.name
 }
 
-func (c *CmdGroup) AddCommand(name string,cmd command.Command) {
+func (c *CmdGroup) AddCommand(name string, cmd command.Command) {
 	c.commands[name] = cmd
 }
 
@@ -41,8 +41,8 @@ func (c *CmdGroup) GetCommand(cmd string) command.Command {
 	return c.commands[cmd]
 }
 
-func (c *CmdGroup) Execute(cmd string,ctx ctx.Ctx,session *discordgo.Session) error {
-	return c.GetCommand(cmd).Execute(ctx,session)
+func (c *CmdGroup) Execute(cmd string, ctx ctx.Ctx, session *discordgo.Session) error {
+	return c.GetCommand(cmd).Execute(ctx, session)
 }
 
 func (c *CmdGroup) GetCommands() map[string]command.Command {
@@ -50,6 +50,5 @@ func (c *CmdGroup) GetCommands() map[string]command.Command {
 }
 
 func New(name string) *CmdGroup {
-	return &CmdGroup{name: name,commands: map[string]command.Command{}}
+	return &CmdGroup{name: name, commands: map[string]command.Command{}}
 }
-

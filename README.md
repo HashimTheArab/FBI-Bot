@@ -24,6 +24,8 @@ A multi-purpose, very efficient discord bot written in Go.
  - Web Commands
    - [x] Ask
      - Fetches answer for a question from WolframAlpha
+   - [x] Lookup
+     - Fetches information on an Xbox account
    - [ ] Urban
      - Fetches a definition from the Urban Dictionary
  - Minecraft Commands

@@ -11,6 +11,7 @@ import (
 type Settings struct {
 	Token            string            `json:"token"`
 	WolframAppID     string            `json:"wolfram_app_id"`
+	XblApiToken      string            `json:"xbl_api_token"`
 	DisabledCommands []string          `json:"disabled_commands"`
 	MainXBLToken     string            `json:"main_xbl_token"`
 	XBLTokens        map[string]string `json:"xbl_tokens"`

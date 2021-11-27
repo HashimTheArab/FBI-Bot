@@ -14,21 +14,22 @@ import (
 
 func InitCommands() {
 	commands = map[string]*command.Command{
-		"help":       {"Provides a list of commands", "help <command>", CategoryGeneral, []string{}, HelpCommand},
+		"help":       {"Provides a list of commands", "help <command>", CategoryGeneral, nil, HelpCommand},
 		"avatar":     {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
 		"ping":       {"Displays the bots latency", "ping", CategoryBot, []string{"latency"}, PingCommand},
-		"snipe":      {"Snipe a deleted message", "snipe [number]", CategoryFun, []string{}, SnipeCommand},
-		"editsnipe":  {"Snipe an edited message", "editsnipe [number]", CategoryFun, []string{}, EditSnipeCommand},
-		"nuke":       {"Nuke a channel", "nuke", CategoryUtility, []string{}, NukeCommand},
+		"snipe":      {"Snipe a deleted message", "snipe [number]", CategoryFun, nil, SnipeCommand},
+		"editsnipe":  {"Snipe an edited message", "editsnipe [number]", CategoryFun, nil, EditSnipeCommand},
+		"nuke":       {"Nuke a channel", "nuke", CategoryUtility, nil, NukeCommand},
 		"about":      {"View information about the bot", "about", CategoryBot, []string{"info"}, StatsCommand},
 		"purge":      {"Purge an amount of messages", "purge <amount>", CategoryUtility, []string{"clear"}, PurgeCommand},
 		"play":       {"Plays a song", "play <name|link>", CategoryMusic, []string{"p"}, PlayCommand},
-		"backup":     {"Backup a server template", "backup <name>", CategoryUtility, []string{}, BackupCommand},
-		"load":       {"Load a server template", "load <name>", CategoryUtility, []string{}, LoadCommand},
-		"query":      {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, []string{}, QueryCommand},
+		"backup":     {"Backup a server template", "backup <name>", CategoryUtility, nil, BackupCommand},
+		"load":       {"Load a server template", "load <name>", CategoryUtility, nil, LoadCommand},
+		"query":      {"Query a minecraft server", "query <ip> [port]", CategoryMinecraft, nil, QueryCommand},
 		"module":     {"Manage command modules", "module <enable:disable:list>", CategoryModules, []string{"modules", "m"}, ModuleCommand},
-		"serverinfo": {"View information on the current server", "serverinfo", CategoryServer, []string{}, ServerCommand},
-		"ask":        {"Answers a question using AI", "ask <question>", CategoryWeb, []string{}, AskCommand},
+		"serverinfo": {"View information on the current server", "serverinfo", CategoryServer, nil, ServerCommand},
+		"ask":        {"Answers a question using AI", "ask <question>", CategoryWeb, nil, AskCommand},
+		"lookup":     {"View data of a specific Xbox account", "lookup <name>", CategoryWeb, nil, LookupCommand},
 	}
 }
 
@@ -36,7 +37,7 @@ var commands map[string]*command.Command
 var handler *SpeedyCmds.PremadeHandler
 var fields []*discordgo.MessageEmbedField
 
-var Categories = [...]string{CategoryGeneral, CategoryFun, CategoryUser, CategoryBot, CategoryModeration, CategoryMusic, CategoryUtility, CategoryModules, CategoryMinecraft}
+var Categories = [...]string{CategoryGeneral, CategoryServer, CategoryUser, CategoryBot, CategoryFun, CategoryMusic, CategoryMinecraft, CategoryWeb, CategoryModeration, CategoryUtility, CategoryModules}
 var UpTime time.Time
 
 const (

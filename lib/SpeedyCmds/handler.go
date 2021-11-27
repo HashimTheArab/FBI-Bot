@@ -48,11 +48,11 @@ func (h *PremadeHandler) handle(s *discordgo.Session, msg *discordgo.MessageCrea
 		args, cmd := Shift(args, 0)
 		err := h.cmds.Execute(cmd, ctx.New(args, msg, s), s)
 		if err != nil {
-			em := &discordgo.MessageEmbed{}
-			em.Title = "An Error Occurred while executing that command"
-			em.Description = err.Error()
-			em.Color = 16711680
-			_, _ = s.ChannelMessageSendEmbed(msg.ChannelID, em)
+			_, _ = s.ChannelMessageSendEmbed(msg.ChannelID, &discordgo.MessageEmbed{
+				Title:       "An error occurred while executing that command",
+				Description: err.Error(),
+				Color:       16711680,
+			})
 		}
 	}
 }

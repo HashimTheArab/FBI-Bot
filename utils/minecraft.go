@@ -11,6 +11,16 @@ import (
 	"time"
 )
 
+type Response struct {
+	ProfileUsers []struct {
+		ID       string `json:"id"`
+		Settings []struct {
+			ID    string `json:"id"`
+			Value string `json:"value"`
+		} `json:"settings"`
+	} `json:"profileUsers"`
+}
+
 type QueryResponse struct {
 	Hostname   string
 	Hostport   string
@@ -145,6 +155,27 @@ func (rsp QueryResponse) GetPlayerCount() string {
 		return "0"
 	}
 	return strconv.Itoa(len(rsp.Players))
+}
+
+func (x Response) Name() string {
+	if name := x.ProfileUsers[0].Settings[6].Value; name != "" {
+		return name
+	}
+	return "Unavailable"
+}
+
+func (x Response) Location() string {
+	if location := x.ProfileUsers[0].Settings[8].Value; location != "" {
+		return location
+	}
+	return "Unavailable"
+}
+
+func (x Response) Bio() string {
+	if bio := x.ProfileUsers[0].Settings[7].Value; bio != "" {
+		return bio
+	}
+	return "Unavailable"
 }
 
 func StripColors(text string) string {

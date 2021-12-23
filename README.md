@@ -48,6 +48,7 @@ A multi-purpose, very efficient discord bot written in Go.
  - Bot Commands
    - [x] Ping
      - Displays both API and regular latency
+     - Can ping a Minecraft server with a Raknet ping (short query) for basic information
    - [x] Stats
      - Displays uptime and other bot information
  - Utility Commands

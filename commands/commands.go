@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func InitCommands() {
+func init() {
 	commands = map[string]*command.Command{
 		"help":       {"Provides a list of commands", "help <command>", CategoryGeneral, nil, HelpCommand},
 		"avatar":     {"Displays a users avatar", "avatar <user>", CategoryUser, []string{"av"}, AvatarCommand},
@@ -56,7 +56,6 @@ const (
 
 func RegisterAll(session *discordgo.Session) {
 	UpTime = time.Now()
-	InitCommands()
 	handler = SpeedyCmds.New(session, commandMap.New(), true, ">")
 	for name, c := range commands {
 		c.Usage = handler.Prefix + c.Usage
@@ -125,8 +124,8 @@ func hasPermission(ctx ctx.Ctx, session *discordgo.Session) bool {
 	return true
 }
 
-func isPrim(ctx ctx.Ctx, session *discordgo.Session) bool {
-	if ctx.GetAuthor().ID != "251817735787511809" {
+func isOwner(ctx ctx.Ctx, session *discordgo.Session) bool {
+	if ctx.GetAuthor().ID != utils.OwnerID {
 		_ = SendError(ctx, session, "You do not have permission to use this command.")
 		return false
 	}

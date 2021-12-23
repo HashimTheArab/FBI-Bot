@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	settings.Load()
 	dg, err := discordgo.New("Bot " + settings.Data.Token)
 
 	if err != nil {

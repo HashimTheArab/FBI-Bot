@@ -19,16 +19,7 @@ type Settings struct {
 
 var Data = Settings{}
 
-func New() string {
-	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Println("Welcome to the Bot setup!")
-	scanner.Scan()
-	Data.Token = scanner.Text()
-	Save()
-	return scanner.Text()
-}
-
-func Load() {
+func init() {
 	settings, err := os.ReadFile("settings.json")
 	if err == nil {
 		if err := json.Unmarshal(settings, &Data); err != nil {
@@ -41,6 +32,15 @@ func Load() {
 	if Data.WolframAppID != "" {
 		wolframgo.AppID = Data.WolframAppID
 	}
+}
+
+func New() string {
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Println("Welcome to the Bot setup!")
+	scanner.Scan()
+	Data.Token = scanner.Text()
+	Save()
+	return scanner.Text()
 }
 
 func Save() {

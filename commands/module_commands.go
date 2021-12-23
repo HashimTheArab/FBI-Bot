@@ -11,7 +11,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if len(ctx.GetArgs()) < 1 {
 		return GetCommand("module").SendUsage(ctx, session)
 	}
-	if !isPrim(ctx, session) {
+	if !isOwner(ctx, session) {
 		return nil
 	}
 	isCategory := func(name string) bool {
@@ -33,7 +33,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			})
 			return err
 		}
-		name := ctx.GetArgs()[1]
+		name := args[1]
 		t := "command"
 		if isCategory(name) {
 			t = "category"
@@ -56,7 +56,7 @@ func ModuleCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			})
 			return err
 		}
-		name := ctx.GetArgs()[1]
+		name := args[1]
 		t := "command"
 		if isCategory(name) {
 			t = "category"

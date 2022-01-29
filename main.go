@@ -63,6 +63,7 @@ func onMessageDelete(_ *discordgo.Session, msg *discordgo.MessageDelete) {
 		Timestamp:  b.Timestamp,
 		Attachment: attachment,
 	})
+	commands.Snipes[b.ChannelID] = commands.Snipes[b.ChannelID][settings.Data.SnipeLimit:]
 }
 
 func onMessageUpdate(_ *discordgo.Session, msg *discordgo.MessageUpdate) {
@@ -83,4 +84,5 @@ func onMessageUpdate(_ *discordgo.Session, msg *discordgo.MessageUpdate) {
 		Timestamp:  b.Timestamp,
 		Attachment: attachment,
 	})
+	commands.EditSnipes[b.ChannelID] = commands.EditSnipes[b.ChannelID][settings.Data.SnipeLimit:]
 }

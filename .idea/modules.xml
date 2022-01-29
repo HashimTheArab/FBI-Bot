@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/FBI Bot.iml" filepath="$PROJECT_DIR$/.idea/FBI Bot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/fbi-bot.iml" filepath="$PROJECT_DIR$/.idea/fbi-bot.iml" />
     </modules>
   </component>
 </project>

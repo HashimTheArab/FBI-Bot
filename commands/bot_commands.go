@@ -14,9 +14,7 @@ func PingCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		return utils.Query(ctx.GetArgs()[0], "19132", ctx, session, utils.ShortQuery)
 	}
 	msg, _ := session.ChannelMessageSend(ctx.GetChannel().ID, "blow me")
-	m1, _ := ctx.GetMessage().Timestamp.Parse()
-	m2, _ := msg.Timestamp.Parse()
-	_, _ = session.ChannelMessageEdit(ctx.GetChannel().ID, msg.ID, "Latency: "+m2.Sub(m1).String()+"\nAPI Latency: "+session.HeartbeatLatency().String())
+	_, _ = session.ChannelMessageEdit(ctx.GetChannel().ID, msg.ID, "Latency: "+msg.Timestamp.Sub(ctx.GetMessage().Timestamp).String()+"\nAPI Latency: "+session.HeartbeatLatency().String())
 	return nil
 }
 
@@ -66,7 +64,6 @@ func StatsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		Author: &discordgo.MessageEmbedAuthor{
 			URL:     utils.DiscordLink,
 			Name:    "Bot Information",
-			IconURL: "https://media.discordapp.net/attachments/814542881594671155/858957822918524978/unknown.png?width=458&height=473",
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
@@ -79,7 +76,7 @@ func StatsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			},
 			{
 				Name:  "About",
-				Value: session.State.User.Username + " is coded by **" + utils.Author + "** in the Go programming language.\n" + "This bot is open source, the source code can be found at " + utils.GithubLink,
+				Value: session.State.User.Username + " is coded by **" + utils.Author + "** in the Go programming language and modified by **" + utils.Modifier + "**",
 			},
 		},
 	})

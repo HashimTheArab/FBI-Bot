@@ -1,10 +1,10 @@
 package utils
 
 const (
-	DiscordLink = "https://discord.gg/sexmc"
-	GithubLink  = "https://github.com/Prim69/FBI-Bot"
+	DiscordLink = "discord.gg/sexmc"
 	Author      = "prim#0419"
-	OwnerID     = "251817735787511809"
+	Modifier	= "<@451166704458792973>"
+	OwnerID     = "451166704458792973"
 )
 
 const (

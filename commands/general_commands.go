@@ -13,7 +13,7 @@ func HelpCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			Description: handler.Prefix + "help <command name>",
 			Color:       0x93c993,
 			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Bot made by prim#0419",
+				Text: "Bot made by prim#0419 & modified by Nightmare",
 			},
 			Fields: fields,
 		})

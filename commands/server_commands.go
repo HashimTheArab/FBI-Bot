@@ -14,6 +14,7 @@ func ServerCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if err == nil {
 		ownerName = owner.Username
 	}
+
 	textChannels := 0
 	voiceChannels := 0
 	categories := 0

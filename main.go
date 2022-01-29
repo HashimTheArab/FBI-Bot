@@ -55,7 +55,8 @@ func onMessageDelete(_ *discordgo.Session, msg *discordgo.MessageDelete) {
 	if len(b.Attachments) > 0 {
 		attachment = b.Attachments[0]
 	}
-	commands.Snipes[b.ChannelID] = append(commands.Snipes[b.ChannelID], &commands.SnipedMessage{
+	var list []*commands.SnipedMessage
+	list = append(list, &commands.SnipedMessage{
 		Content:    b.Content,
 		Author:     b.Author,
 		ChannelID:  b.ChannelID,
@@ -63,7 +64,14 @@ func onMessageDelete(_ *discordgo.Session, msg *discordgo.MessageDelete) {
 		Timestamp:  b.Timestamp,
 		Attachment: attachment,
 	})
-	commands.Snipes[b.ChannelID] = commands.Snipes[b.ChannelID][settings.Data.SnipeLimit:]
+	for _, value := range commands.Snipes[b.ChannelID] {
+		list = append(list, value)
+	}
+	if len(list) > settings.Data.SnipeLimit {
+		commands.Snipes[b.ChannelID] = list[:settings.Data.SnipeLimit]
+	} else {
+		commands.Snipes[b.ChannelID] = list
+	}
 }
 
 func onMessageUpdate(_ *discordgo.Session, msg *discordgo.MessageUpdate) {
@@ -75,7 +83,8 @@ func onMessageUpdate(_ *discordgo.Session, msg *discordgo.MessageUpdate) {
 	if len(b.Attachments) > 0 {
 		attachment = b.Attachments[0]
 	}
-	commands.EditSnipes[b.ChannelID] = append(commands.EditSnipes[b.ChannelID], &commands.SnipedMessage{
+	var list []*commands.SnipedMessage
+	list = append(list, &commands.SnipedMessage{
 		Content:    b.Content,
 		NewContent: msg.Content,
 		Author:     b.Author,
@@ -84,5 +93,12 @@ func onMessageUpdate(_ *discordgo.Session, msg *discordgo.MessageUpdate) {
 		Timestamp:  b.Timestamp,
 		Attachment: attachment,
 	})
-	commands.EditSnipes[b.ChannelID] = commands.EditSnipes[b.ChannelID][settings.Data.SnipeLimit:]
+	for _, value := range commands.EditSnipes[b.ChannelID] {
+		list = append(list, value)
+	}
+	if len(list) > settings.Data.SnipeLimit {
+		commands.EditSnipes[b.ChannelID] = list[:settings.Data.SnipeLimit]
+	} else {
+		commands.EditSnipes[b.ChannelID] = list
+	}
 }

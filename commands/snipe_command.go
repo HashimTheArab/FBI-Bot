@@ -5,6 +5,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/prim69/fbi-bot/utils"
 	"strconv"
+	"time"
 )
 
 type SnipedMessage struct {
@@ -13,7 +14,7 @@ type SnipedMessage struct {
 	Author     *discordgo.User
 	ChannelID  string
 	ID         string
-	Timestamp  discordgo.Timestamp
+	Timestamp  time.Time
 	Attachment *discordgo.MessageAttachment
 }
 
@@ -29,12 +30,12 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	var num int
 	if len(ctx.GetArgs()) > 0 {
 		if n, err := strconv.Atoi(ctx.GetArgs()[0]); err == nil {
-			num = n - 1
+			if n < 0 || n+1 > len(Snipes[ctx.GetChannel().ID]) {
+				num = 0
+			} else {
+				num = n - 1
+			}
 		}
-	}
-
-	if num < 0 || (num+1) > len(Snipes[ctx.GetChannel().ID]) {
-		num = 0
 	}
 
 	msg := Snipes[ctx.GetChannel().ID][num]
@@ -49,19 +50,11 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		}
 	}
 
-	var time string
-	t, err := msg.Timestamp.Parse()
-	if err == nil {
-		time = t.Format("January-02-2006 3:04:05 PM MST")
-	} else {
-		time = "Unavailable"
-	}
-
 	_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Description: msg.Content,
 		Color:       utils.Pink,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: strconv.Itoa(num+1) + "/" + strconv.Itoa(len(Snipes[ctx.GetChannel().ID])) + " | " + time,
+			Text: strconv.Itoa(num+1) + "/" + strconv.Itoa(len(Snipes[ctx.GetChannel().ID])) + " | " + msg.Timestamp.Format("January-02-2006 3:04:05 PM MST"),
 		},
 		Author: &discordgo.MessageEmbedAuthor{
 			Name:    msg.Author.String(),
@@ -81,23 +74,15 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	var num int
 	if len(ctx.GetArgs()) > 0 {
 		if n, err := strconv.Atoi(ctx.GetArgs()[0]); err == nil {
-			num = n - 1
+			if n < 0 || n+1 > len(EditSnipes[ctx.GetChannel().ID]) {
+				num = 0
+			} else {
+				num = n - 1
+			}
 		}
 	}
 
-	if num < 0 || (num+1) > len(EditSnipes[ctx.GetChannel().ID]) {
-		num = 0
-	}
-
 	msg := EditSnipes[ctx.GetChannel().ID][num]
-
-	var time string
-	t, err := msg.Timestamp.Parse()
-	if err == nil {
-		time = t.Format("January-02-2006 3:04:05 PM MST")
-	} else {
-		time = "Unavailable"
-	}
 
 	var image *discordgo.MessageEmbedImage
 	if msg.Attachment != nil {
@@ -122,7 +107,7 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		},
 		Color: utils.Pink,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: strconv.Itoa(num+1) + "/" + strconv.Itoa(len(EditSnipes[ctx.GetChannel().ID])) + " | " + time,
+			Text: strconv.Itoa(num+1) + "/" + strconv.Itoa(len(EditSnipes[ctx.GetChannel().ID])) + " | " + msg.Timestamp.Format("January-02-2006 3:04:05 PM MST"),
 		},
 		Author: &discordgo.MessageEmbedAuthor{
 			Name:    msg.Author.String(),

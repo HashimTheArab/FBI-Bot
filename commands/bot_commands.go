@@ -14,9 +14,7 @@ func PingCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		return utils.Query(ctx.GetArgs()[0], "19132", ctx, session, utils.ShortQuery)
 	}
 	msg, _ := session.ChannelMessageSend(ctx.GetChannel().ID, "blow me")
-	m1, _ := ctx.GetMessage().Timestamp.Parse()
-	m2, _ := msg.Timestamp.Parse()
-	_, _ = session.ChannelMessageEdit(ctx.GetChannel().ID, msg.ID, "Latency: "+m2.Sub(m1).String()+"\nAPI Latency: "+session.HeartbeatLatency().String())
+	_, _ = session.ChannelMessageEdit(ctx.GetChannel().ID, msg.ID, "Latency: "+msg.Timestamp.Sub(ctx.GetMessage().Timestamp).String()+"\nAPI Latency: "+session.HeartbeatLatency().String())
 	return nil
 }
 

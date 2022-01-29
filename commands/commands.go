@@ -30,6 +30,7 @@ func init() {
 		"serverinfo": {"View information on the current server", "serverinfo", CategoryServer, nil, ServerCommand},
 		"ask":        {"Answers a question using AI", "ask <question>", CategoryWeb, nil, AskCommand},
 		"lookup":     {"View data of a specific Xbox account", "lookup <name>", CategoryWeb, nil, LookupCommand},
+		"whois":      {"View information about a user", "whois <user>", CategoryUser, nil, WhoIsCommand},
 	}
 }
 

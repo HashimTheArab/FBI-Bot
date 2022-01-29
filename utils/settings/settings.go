@@ -15,6 +15,7 @@ type Settings struct {
 	DisabledCommands []string          `json:"disabled_commands"`
 	MainXBLToken     string            `json:"main_xbl_token"`
 	XBLTokens        map[string]string `json:"xbl_tokens"`
+	SnipeLimit       uint64            `json:"snipe_limit"`
 }
 
 var Data = Settings{}
@@ -32,11 +33,15 @@ func init() {
 	if Data.WolframAppID != "" {
 		wolframgo.AppID = Data.WolframAppID
 	}
+	if Data.SnipeLimit == 0 {
+		Data.SnipeLimit = 50
+	}
 }
 
 func New() string {
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Println("Welcome to the Bot setup!")
+	fmt.Print("Enter your token: ")
 	scanner.Scan()
 	Data.Token = scanner.Text()
 	Save()

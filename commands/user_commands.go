@@ -42,14 +42,12 @@ func WhoIsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			}
 		}
 	}
-	guild_user, err := session.GuildMember(ctx.GetGuild().ID, user.ID)
-	joined := "Hasn't"
-	if err == nil {
-		t, _ := guild_user.JoinedAt.Parse()
-		joined = t.String()
+	joined := "Never"
+	if guildUser, err := session.GuildMember(ctx.GetGuild().ID, user.ID); err == nil {
+		joined = guildUser.JoinedAt.String()
 	}
 	creation, _ := discordgo.SnowflakeTimestamp(user.ID)
-	_, err = SendEmbed(ctx, session, &discordgo.MessageEmbed{
+	_, err := SendEmbed(ctx, session, &discordgo.MessageEmbed{
 		Title: user.Username,
 		Fields: []*discordgo.MessageEmbedField{
 			{Name: "User Id", Value: user.ID},

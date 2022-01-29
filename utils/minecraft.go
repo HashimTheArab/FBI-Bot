@@ -66,10 +66,10 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{
-				{Name: "🖇 Software", Value: a[7]},
-				{Name: "💾 Version", Value: a[3] + " (Protocol: " + a[2] + ")"},
-				{Name: "🎉 MOTD", Value: StripColors(a[1])},
-				{Name: "👥 Players", Value: a[4] + "/" + a[5]},
+				{Name: "Server Software", Value: a[7]},
+				{Name: "Server Version", Value: a[3] + " (Protocol: " + a[2] + ")"},
+				{Name: "MOTD", Value: StripColors(a[1])},
+				{Name: "Players", Value: a[4] + "/" + a[5]},
 			},
 			Color: Pink,
 		})
@@ -92,19 +92,19 @@ func Query(ip, port string, ctx ctx.Ctx, session *discordgo.Session, t QueryType
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Fields: []*discordgo.MessageEmbedField{
-				{Name: "🖇 Software", Value: r.GetStringResponse(r.Software)},
-				{Name: "💾 Version", Value: r.GetStringResponse(r.Version)},
-				{Name: "🏳 Whitelist", Value: r.GetStringResponse(r.Whitelist)},
-				{Name: "💻 Plugins (" + pluginLength + ")", Value: pluginList},
-				{Name: "🗺 Map", Value: r.GetStringResponse(r.Map)},
-				{Name: "🎉 MOTD", Value: r.GetStringResponse(r.MOTD)},
-				{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: players},
+				{Name: "Server Software", Value: r.GetStringResponse(r.Software)},
+				{Name: "Server Version", Value: r.GetStringResponse(r.Version)},
+				{Name: "Whitelist", Value: r.GetStringResponse(r.Whitelist)},
+				{Name: "Server Plugins (" + pluginLength + ")", Value: pluginList},
+				{Name: "Map", Value: r.GetStringResponse(r.Map)},
+				{Name: "MOTD", Value: r.GetStringResponse(r.MOTD)},
+				{Name: "Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: players},
 			},
 			Color: Pink,
 		}
 		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, embed)
 		embed.Fields = []*discordgo.MessageEmbedField{
-			{Name: "👥 Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: rest},
+			{Name: "Players (" + r.GetPlayerCount() + "/" + r.Maxplayers + ")", Value: rest},
 		}
 		_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, embed)
 	}
@@ -140,14 +140,14 @@ func (rsp QueryResponse) GetPlugins() (string, string) {
 		list := strings.Split(plugins, "; ")
 		return strconv.Itoa(len(list)), strings.Join(list, ", ")
 	}
-	return "0", "This server has plugin query disabled."
+	return "0", "Server has plugin querying disabled."
 }
 
 func (rsp QueryResponse) GetPlayers() []string {
 	if len(rsp.Players) > 0 && rsp.Players[0] != "" {
 		return rsp.Players
 	}
-	return []string{"There are no players online!"}
+	return []string{"No players are online."}
 }
 
 func (rsp QueryResponse) GetPlayerCount() string {

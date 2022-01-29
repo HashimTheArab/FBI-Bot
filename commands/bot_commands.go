@@ -64,7 +64,6 @@ func StatsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		Author: &discordgo.MessageEmbedAuthor{
 			URL:     utils.DiscordLink,
 			Name:    "Bot Information",
-			IconURL: "https://media.discordapp.net/attachments/814542881594671155/858957822918524978/unknown.png?width=458&height=473",
 		},
 		Fields: []*discordgo.MessageEmbedField{
 			{
@@ -77,7 +76,7 @@ func StatsCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			},
 			{
 				Name:  "About",
-				Value: session.State.User.Username + " is coded by **" + utils.Author + "** in the Go programming language.\n" + "This bot is open source, the source code can be found at " + utils.GithubLink,
+				Value: session.State.User.Username + " is coded by **" + utils.Author + "** in the Go programming language and modified by **" + utils.Modifier + "**",
 			},
 		},
 	})

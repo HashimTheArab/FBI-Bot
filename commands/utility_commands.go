@@ -34,15 +34,15 @@ func NukeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		NSFW:                 channel.NSFW,
 	})
 	_, _ = session.ChannelMessageSendEmbed(ch.ID, &discordgo.MessageEmbed{
-		Title: "Kaboom! Pussy Nuked!",
+		Title: "Channel Nuked Successfully.",
 		Color: 0x6b0000,
 		Image: &discordgo.MessageEmbedImage{
-			URL:    "https://media.discordapp.net/attachments/814542881594671155/858199443056623656/nuke_picture.png",
-			Width:  631,
-			Height: 473,
+			URL:    "https://imgur.com/GsxVDi7.gif",
+			Width:  430,
+			Height: 225,
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Ran by: " + ctx.GetAuthor().String(),
+			Text: "Nuked by: " + ctx.GetAuthor().String(),
 		},
 	})
 	return nil
@@ -57,7 +57,7 @@ func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		return SendError(ctx, session, "Error: "+err.Error())
 	}
 	if num < 0 {
-		return SendError(ctx, session, "The accepted amount range is 1-100!")
+		return SendError(ctx, session, "Invalid purge amount. (1-100)")
 	}
 	if !hasPermission(ctx, session) {
 		return nil
@@ -83,11 +83,11 @@ func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		return SendError(ctx, session, "Failed to purge, error: "+err.Error())
 	}
 	_, _ = session.ChannelMessageSendEmbed(ctx.GetChannel().ID, &discordgo.MessageEmbed{
-		Title:       "Purge Finished!",
-		Description: strconv.Itoa(len(msgs)) + " messages purged!",
+		Title:       "Command ran successfully.",
+		Description: strconv.Itoa(len(msgs)) + " messages removed!",
 		Color:       0xACF9DC,
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "Ran by: " + ctx.GetAuthor().String(),
+			Text: "Purged by: " + ctx.GetAuthor().String(),
 		},
 	})
 	return nil

@@ -67,7 +67,7 @@ func SnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 
 func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if len(EditSnipes[ctx.GetChannel().ID]) < 1 {
-		_, _ = session.ChannelMessageSend(ctx.GetChannel().ID, "There's nothing to snipe! *uwu*")
+		_, _ = session.ChannelMessageSend(ctx.GetChannel().ID, "No message to be sniped available.")
 		return nil
 	}
 
@@ -115,5 +115,7 @@ func EditSnipeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 		},
 		Image: image,
 	})
+
 	return nil
 }
+

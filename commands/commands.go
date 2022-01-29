@@ -31,6 +31,7 @@ func init() {
 		"ask":        {"Answers a question using AI", "ask <question>", CategoryWeb, nil, AskCommand},
 		"lookup":     {"View data of a specific Xbox account", "lookup <name>", CategoryWeb, nil, LookupCommand},
 		"whois":      {"View information about a user", "whois <user>", CategoryUser, nil, WhoIsCommand},
+		"ban": {"Ban a user from the guild", "ban <user> <reason>", CategoryModeration, nil, BanCommand},
 	}
 }
 
@@ -51,7 +52,7 @@ const (
 	CategoryBot        = "Bot"
 	CategoryUtility    = "Utility"
 	CategoryModules    = "Modules"
-	CategoryModeration = "Moderation"
+	CategoryModeration = "Mod"
 	CategoryMinecraft  = "Minecraft"
 )
 

@@ -22,7 +22,8 @@ func main() {
 
 	commands.RegisterAll(dg)
 
-	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences
+	//dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences
+	dg.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
 	if err := dg.Open(); err != nil {
 		panic(err)
@@ -30,9 +31,9 @@ func main() {
 
 	dg.State.MaxMessageCount = 30000
 
-	_ = dg.UpdateListeningStatus("moans")
+	_ = dg.UpdateListeningStatus("death.")
 
-	fmt.Println("FBI Bot is now running!")
+	fmt.Println("BP Bot is now running!")
 
 	c := make(chan os.Signal, 2)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)

@@ -69,3 +69,6 @@ A multi-purpose, very efficient discord bot written in Go.
      - Disable a command/category
    - [x] List
      - List all disabled commands/categories
+ - Moderation System
+   - [x] Ban
+     - Ban a user from the server

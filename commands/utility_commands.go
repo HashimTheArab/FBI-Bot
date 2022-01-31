@@ -59,7 +59,7 @@ func PurgeCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	if num < 0 {
 		return SendError(ctx, session, "The accepted amount range is 1-100!")
 	}
-	if !hasPermission(ctx, session) {
+	if !hasPermission(ctx, session, discordgo.PermissionManageMessages) {
 		return nil
 	}
 	if ctx.GetMessage() != nil {

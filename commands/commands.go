@@ -31,6 +31,7 @@ func init() {
 		"ask":        {"Answers a question using AI", "ask <question>", CategoryWeb, nil, AskCommand},
 		"lookup":     {"View data of a specific Xbox account", "lookup <name>", CategoryWeb, nil, LookupCommand},
 		"whois":      {"View information about a user", "whois <user>", CategoryUser, nil, WhoIsCommand},
+		"ban":        {"Ban another user", "ban <user> [reason]", CategoryModeration, nil, BanCommand},
 	}
 }
 
@@ -112,13 +113,14 @@ func SendEmbed(ctx ctx.Ctx, session *discordgo.Session, embed *discordgo.Message
 	return session.ChannelMessageSendEmbed(ctx.GetChannel().ID, embed)
 }
 
-func hasPermission(ctx ctx.Ctx, session *discordgo.Session) bool {
+// hasPermission checks if the given ctx has a specific permission.
+func hasPermission(ctx ctx.Ctx, session *discordgo.Session, perm int64) bool {
 	p, err := session.State.UserChannelPermissions(ctx.GetAuthor().ID, ctx.GetChannel().ID)
 	if err != nil {
 		_ = SendError(ctx, session, "Failed to retrieve user permissions! Error: "+err.Error())
 		return false
 	}
-	if (p & discordgo.PermissionManageMessages) == 0 {
+	if (p & perm) == 0 {
 		_ = SendError(ctx, session, "You do not have permission to use this command.")
 		return false
 	}

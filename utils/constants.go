@@ -8,7 +8,8 @@ const (
 )
 
 const (
-	Red   = 16711680
-	Green = 0x58e338
-	Pink  = 0xD8CDE9
+	Red    = 16711680
+	Green  = 0x58e338
+	Pink   = 0xD8CDE9
+	Purple = 0x790eee
 )

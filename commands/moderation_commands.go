@@ -3,6 +3,7 @@ package commands
 import (
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
+	"github.com/prim69/fbi-bot/utils"
 )
 
 func BanCommand(ctx ctx.Ctx, session *discordgo.Session) error {
@@ -24,19 +25,16 @@ func BanCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 			return SendError(ctx, session, err.Error())
 		}
 		_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
-			URL:         "",
-			Type:        "",
-			Title:       "",
-			Description: "",
-			Timestamp:   "",
-			Color:       0,
-			Footer:      nil,
-			Image:       nil,
-			Thumbnail:   nil,
-			Video:       nil,
-			Provider:    nil,
-			Author:      nil,
-			Fields:      nil,
+			Description: "**Reason:** " + ctx.GetArgs()[1],
+			Color:       utils.Purple,
+			Footer: &discordgo.MessageEmbedFooter{
+				Text:    "Banned by: " + ctx.GetAuthor().String(),
+				IconURL: ctx.GetAuthor().AvatarURL(""),
+			},
+			Author: &discordgo.MessageEmbedAuthor{
+				Name:    "User Banned!",
+				IconURL: user.AvatarURL(""),
+			},
 		})
 		return nil
 	}

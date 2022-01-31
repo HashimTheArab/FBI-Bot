@@ -4,6 +4,7 @@ import (
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
 	"github.com/prim69/fbi-bot/utils"
+	"strings"
 )
 
 func BanCommand(ctx ctx.Ctx, session *discordgo.Session) error {
@@ -21,19 +22,22 @@ func BanCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 				return SendError(ctx, session, "That user does not exist!")
 			}
 		}
-		if err := session.GuildBanCreateWithReason(ctx.GetGuild().ID, user.ID, ctx.GetArgs()[1], 0); err != nil {
+		reason := strings.Join(ctx.GetArgs()[1:], " ")
+		if err := session.GuildBanCreateWithReason(ctx.GetGuild().ID, user.ID, reason, 0); err != nil {
 			return SendError(ctx, session, err.Error())
 		}
 		_, _ = SendEmbed(ctx, session, &discordgo.MessageEmbed{
-			Description: "**Reason:** " + ctx.GetArgs()[1],
+			Description: "**Reason:** " + reason,
 			Color:       utils.Purple,
 			Footer: &discordgo.MessageEmbedFooter{
 				Text:    "Banned by: " + ctx.GetAuthor().String(),
 				IconURL: ctx.GetAuthor().AvatarURL(""),
 			},
 			Author: &discordgo.MessageEmbedAuthor{
-				Name:    "User Banned!",
-				IconURL: user.AvatarURL(""),
+				Name: "User Banned!",
+			},
+			Thumbnail: &discordgo.MessageEmbedThumbnail{
+				URL: user.AvatarURL(""),
 			},
 		})
 		return nil

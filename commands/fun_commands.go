@@ -24,9 +24,8 @@ type stuff struct {
 }
 
 func UrbanCommand(ctx ctx.Ctx, session *discordgo.Session) error {
-	if len(ctx.GetArgs()) > 1 {
-		_, _ = session.ChannelMessageSend(ctx.GetChannel().ID, "!urban <word>")
-		return nil
+	if len(ctx.GetArgs()) < 1 {
+		return GetCommand("urban").SendUsage(ctx, session)
 	}
 	api, err := http.Get("http://api.urbandictionary.com/v0/define?term=" + ctx.GetArgs()[0])
 	if err != nil {

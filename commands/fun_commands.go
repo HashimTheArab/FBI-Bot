@@ -3,14 +3,12 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
-	_ "fmt"
 	"io/ioutil"
 	"net/http"
-
 	"github.com/Jviguy/SpeedyCmds/command/ctx"
 	"github.com/bwmarrin/discordgo"
 
-	_ "net/http"
+	
 )
 
 type UrbanDictList struct {

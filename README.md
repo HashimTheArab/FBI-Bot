@@ -26,7 +26,7 @@ A multi-purpose, very efficient discord bot written in Go.
      - Fetches answer for a question from WolframAlpha
    - [x] Lookup
      - Fetches information on an Xbox account
-   - [ ] Urban
+   - [x] Urban
      - Fetches a definition from the Urban Dictionary
  - Minecraft Commands
    - [x] Query

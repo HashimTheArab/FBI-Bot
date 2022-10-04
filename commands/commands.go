@@ -32,6 +32,7 @@ func init() {
 		"lookup":     {"View data of a specific Xbox account", "lookup <name>", CategoryWeb, nil, LookupCommand},
 		"whois":      {"View information about a user", "whois <user>", CategoryUser, nil, WhoIsCommand},
 		"ban":        {"Ban another user", "ban <user> [reason]", CategoryModeration, nil, BanCommand},
+		"urban":      {"Searches the urban dictionary for a word", "urban <word>", CategoryFun, nil, UrbanCommand},
 	}
 }
 

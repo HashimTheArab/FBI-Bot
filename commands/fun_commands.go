@@ -27,28 +27,24 @@ func UrbanCommand(ctx ctx.Ctx, session *discordgo.Session) error {
 	}
 	api, err := http.Get("http://api.urbandictionary.com/v0/define?term=" + ctx.GetArgs()[0])
 	if err != nil {
-		fmt.Println("Could not make the request to the api!", err.Error())
-		return nil
+		return SendError(ctx, session,"Could not make the request to the api!", err.Error())
 	}
 	defer api.Body.Close()
 	if api.StatusCode != 200 {
-		fmt.Println("Could not get request from api")
-		return nil
+		return SendError(ctx, session,"Could not get request from api")
+	
 	}
 	body, err := ioutil.ReadAll(api.Body)
 	if err != nil {
-		fmt.Println("Failed to read response body! ", err.Error())
-		return nil
+		return SendError(ctx, session,"Failed to read response body! ", err.Error())
 	}
 	var found UrbanDictList
 	err = json.Unmarshal(body, &found)
 	if err != nil {
-		fmt.Println("Error decoding json: ", err.Error())
-		return nil
+		return SendError(ctx, session,"Error decoding json: ", err.Error())
 	}
 	if len(found.List) < 1 {
-		_, _ = session.ChannelMessageSend(ctx.GetChannel().ID, "Thats not a word!")
-		fmt.Println("The requested word is not defined in urban dictionary!")
+                return SendError(ctx, session,"The requested word is not defined in urban dictionary!")
 
 	}
 	urban := found.List[0]
